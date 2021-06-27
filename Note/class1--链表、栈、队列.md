@@ -1,9 +1,3 @@
-
-
-
-
-
-
 [TOC]
 
 # 第一周：链表、栈、队列
@@ -22,28 +16,38 @@
 
 ### vector可变长动态数组
 
-==特点：==
+**==特点：==**
 
 - 连续存储，空间可动态扩展
 - 随机访问`[]`或`vector.at()`
 - 节省空间，但通常并不是满存
-- 内部插入、删除操作效率低，基本禁止。Vector 被设计成只能在后端进行追加和删除操作，其原因是vector 内部的实现是按照顺序表的原理，即只能push back 和pop back ，不能push front, pop front ；
+- <u>内部插入、删除操作效率低，基本禁止</u>。Vector 被设计成只能在后端进行追加和删除操作，其原因是vector 内部的实现是按照顺序表的原理，即只能push back 和pop back ，不能push front, pop front ；
 - 当动态添加的数据超过vector 默认分配的大小时要进行内存的重新分配、拷贝与释放，这个操作非常消耗性能。 所以要vector 达到最优的性能，最好在创建vector 时就指定其空间大小。
-- 通常用户需要的是一个可以存放任意多个元素的数组，但编译器不可能申请无限内存，它又不知道用户到底想要多少，所以设计时你要从编译器的角度思考问题。比如，你开了一个空array，往里面push四个值，你调用size返回的肯定是4，但编译器可能会给你预留好更多的空间（比如6），这个就是capacity，但是对你不可见的。
+- <u>通常用户需要的是一个可以存放任意多个元素的数组，但编译器不可能申请无限内存，它又不知道用户到底想要多少，所以设计时你要从编译器的角度思考问题。比如，你开了一个空array，往里面push四个值，你调用size返回的肯定是4，但编译器可能会给你预留好更多的空间（比如6），这个就是capacity，但是对你不可见的</u>。
 - Python有啥方法可以查看capacity不？
   - 有的, 你可以import sys, 然后sys.getsizeof(aList), 你可以看到他跟len的结果是不一样的 你试试？(哦getsizeof是字节数，你可能得除以元素的长度才能得到capacity. Python的int好像8字节, 除以8)
 
-==如何实现一个可变长数组==？
+**==如何实现一个可变长数组==？**
 
 - 请你设计一个class，支持末尾插入，末尾删除，访问第i个元素，问实现方法要求能支持Indexing and随机访问
 
-- 分配多长的连续空间？
-  - 空数组，分配常数空间
-- Push back空间不够用怎么处理？
-  - 申请2倍大小连续空间 >> 拷贝 >> 销毁原对象 >> 释放旧空间
+Assumption
+
+- 用户declared 这个list后，肯定要储存至少一个element是吧 ==》但你作为executor, 你不可能用户每append 一个element, 你就要allocate a new memory, copy old data to new memory, then free old memory(重新分配、拷贝与释放这几个操作很浪费时间的，因为涉及到system call, I/O communication，memory scheduling) ==> 因此，在一开始你就要给用户预留些空间（e.g., 100byte, then when reach that limit, you are going to create a new space  that is twice larger, say 200 byte or 50% of old memory space — up to you, and copy all data to the new allocated memory space) 
+  - ![image-20210626000741053](img/image-20210626000741053.png)
+- 理论上空间上可以push无数多个element，如果电脑内存足够大的话
+- 一个数组的容量, or memory space,（对用户不可见) 和用户实际使用大小是不一样的。 For example, in python, you can use check that sys.getsizeof(aList) != len(aList), https://stackoverflow.com/questions/17574076/what-is-the-difference-between-len-and-sys-getsizeof-methods-in-python
+  - ![image-20210626001103276](img/image-20210626001103276.png)
+
+需要思考的问题：
+
+- **分配多长的连续空间？**
+  - 空数组，<u>分配常数空间</u>
+- **Push back空间不够用怎么处理？** （比如说，一个当用户所使用的list）
+  - <u>重新申请2倍大小连续空间 >> 拷贝数据到新的空间 >>  释放free old memory space</u>
   - 在空数组中连续插入n个元素，需要总插入、拷贝次数：n+n/2+n/4+n/8+… <2n （note, it’s geometric series, so $$S = 1+r+r^2 + r^3…= \frac{1}{1- r}, where 0<r<1$$
-- Pop back空间剩余很多如何收回？
-  - 如果空间利用率不到25%（也就是75%都没用到），释放一半的空间
+- **Pop back空间剩余很多如何收回？**
+  - <u>如果空间利用率不到25%（也就是75%都没用到），释放一半的空间</u>
 
 ==时间复杂度：==
 
@@ -170,12 +174,12 @@ ListNode protect = new ListNode(0, head); // (value, ->next)
 
 ## 3. 栈stack
 
-What is Stack?
+**What is Stack?**
 
 - First in, Last out
 - ![image-20210621223317071](./img/image-20210621223317071.png)
 
-==时间复杂度==
+**==时间复杂度==**
 
 - push 入栈 : O(1)
 - pop 出栈 : O(1)
@@ -183,7 +187,7 @@ What is Stack?
 
 只能访问、push、pop顶部的元素
 
-==操作==
+**==操作==**
 
 * top()：返回一个栈顶元素的引用，类型为 T&。如果栈为空，返回值未定义。
 * push(const T& obj)：可以将对象副本压入栈顶。这是通过调用底层容器的 push_back() 函数完成的。
@@ -207,7 +211,7 @@ stack<int, vector<int> > mystack2;
 
 ## 4. 队列queue
 
-**What is queue**
+**What is queue？**
 
 - (FIFO)First in, First out
 - ![image-20210621223411918](./img/image-20210621223411918.png)
@@ -235,7 +239,7 @@ stack<int, vector<int> > mystack2;
     - Priority Queue可以用heapq的package
     - 官方文档，https://docs.python.org/3/library/heapq.html
 
-==时间复杂度==
+**==时间复杂度==**
 
 - push 入栈 : O(1)
 - pop 出栈 : O(1)
@@ -261,7 +265,7 @@ heapq.heappush(heap, item)
 
 ```
 
-==操作==
+**==操作==**
 
 * front()：返回 queue 中第一个元素的引用。如果 queue 是常量，就返回一个常引用；如果 queue 为空，返回值是未定义的。
 * back()：返回 queue 中最后一个元素的引用。如果 queue 是常量，就返回一个常引用；如果 queue 为空，返回值是未定义的。
@@ -735,10 +739,53 @@ class Solution:
 #### 20.有效的括号 easy
 https://leetcode-cn.com/problems/valid-parentheses/
 
+Question:
+
+![image-20210625225957432](img/image-20210625225957432.png)
+
+**Idea:**
+
 * 建立一个栈
 * 左括号push,右括号和top比较。不对应就false，对应就pop
 * 注意if嵌套关系，和判断pop后的空栈情况
-* <img src="./img/image-20210621230644336.png" alt="image-20210621230644336" style="zoom: 80%;" />
+
+Code:
+
+```python
+class Solution:
+    def isValid(self, s: str) -> bool:
+        """
+        "()[]{}"
+        ^
+        ( ] 
+            ^
+        ([)]
+        ^
+        stack = [(  ]
+        [ == ) ==>
+        """
+        # This can save some computation cost
+        if len(s) % 2 == 1:
+            return False
+        stack = []
+        for ch in s:
+            if ch == "(" or ch == "{" or ch == "[":
+                stack.append(ch)
+            else:
+                # Somehting is missing
+                if len(stack)==0:
+                    return False
+                else:
+                    # 检查最后一个是否是匹配规定的类型
+                    top = stack.pop()
+                    if ch == ")" and top != "(":
+                        return False
+                    if ch == "}" and top != "{":
+                        return False
+                    if ch == "]" and top != "[":
+                        return False
+        return (len(stack) == 0)
+```
 
 #### 155.最小栈 medium
 https://leetcode-cn.com/problems/min-stack/

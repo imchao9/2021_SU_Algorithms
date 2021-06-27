@@ -72,3 +72,10 @@
   - What is pass by sharing in Python:  ==> 简单来说就是下图。它和 ”copy-by-value” and “copy by reference” 都不一样。C是”copy-by-value”，当pointer被pass to caller, an exact copy will be created. However, in python, it’s using “copy by sharing”, so a new address/reference will be created.  More details refers to this, https://www.python-course.eu/python3_passing_arguments.php
   - <img src="img/image-20210623000141850.png" alt="image-20210623000141850" style="zoom:200%;" />
 
+
+
+## Python Tricks
+
+- range() vs xrange() in Python:
+  - 
+
