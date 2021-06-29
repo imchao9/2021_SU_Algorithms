@@ -1,0 +1,45 @@
+设计变长数组
+class List {
+    List()
+    push()
+    pop()
+    get(i) 返回第i个数的引用，i出界，抛出异常
+}
+
+C++ map, Java Map, Python dict, JS object 
+int i -> value 映射
+
+理论上可以无限大
+
+[    释放掉    ][  占用  ][         200            ]
+
+vector size,length
+
+system
+
+sys.
+
+len()
+容量(capacity)：200
+实际大小(size)：101
+
+Easy
+合并有序数组
+去重
+移动零
+反转链表
+合并两个有序链表
+加一
+
+Medium
+有效的括号
+最小栈
+后缀表达式求值
+设计循环双端队列
+环形链表
+环形链表II
+
+Hard
+K个一组翻转链表
+邻值查找
+中缀表达式求值

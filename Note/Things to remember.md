@@ -72,10 +72,81 @@
   - What is pass by sharing in Python:  ==> 简单来说就是下图。它和 ”copy-by-value” and “copy by reference” 都不一样。C是”copy-by-value”，当pointer被pass to caller, an exact copy will be created. However, in python, it’s using “copy by sharing”, so a new address/reference will be created.  More details refers to this, https://www.python-course.eu/python3_passing_arguments.php
   - <img src="img/image-20210623000141850.png" alt="image-20210623000141850" style="zoom:200%;" />
 
+- 遇事不决先枚举。。。
+
+- for, while loop枚举时，一定要注意处理越界的情况
+
+- 程序如果看不懂，直接打印log出来，看都干了啥
+
+- 双向链表的优缺点是什么？如何弥补？
+
+  - ==》优点是可以快速insert and delete, 只需O(1)
+  - ==》缺点是无法快速访问，需要O(n) 
+  - ==> 弥补方法是通过数组或者哈希表建立一个映射的关系
+  
+- How to start with a double linked list?
+
+  - <img src="img/image-20210628154504304.png" alt="image-20210628154504304" style="zoom:67%;" />
+
+- How to implement insert() and delete() in DLL?
+  - ![image-20210628160456696](img/image-20210628160456696.png)
+
+
+
 
 
 ## Python Tricks
 
-- range() vs xrange() in Python:
-  - 
+- Converting a list of list to a list of tuple:
+
+e.g., [[x1, y1], [x2, y2]] ==> {(x1, y1), (x2, y2)} 
+
+```python
+obstacleSet = set(map(tuple, obstacles))
+```
+
+https://leetcode-cn.com/problems/walking-robot-simulation/
+
+- How to sort a list of string?
+
+e.g., “bcda” ==> “abcd”
+
+```python
+ str = "bcda"
+''.join(sorted(str))
+```
+
+Reference: 1)Offical Doc, https://docs.python.org/3/library/collections.html#, 2)GeekForGeek, https://www.geeksforgeeks.org/defaultdict-in-python/, 3) Programiz, https://www.programiz.com/python-programming/methods/built-in/sorted
+
+- dict() vs Collections.defaultdict(list)
+
+a Python dictionary throws a `KeyError` if you try to get an item with a key that is not currently in the dictionary.
+
+However, the `defaultdict` in contrast will simply create any items that you try to access (provided of course they do not exist yet). In this case, default items are created using `list()`, which returns a new empty list object.
+
+- Converting between Dict() and list()
+
+```python
+dict1 = {'name': 'Ravi', 'age': 23, 'marks': 56}
+# Dict ==> List: [('name', 'Ravi'), ('age', 23), ('marks', 56)]
+list1 = list(d1.items())
+# List ==> Dict: {'name': 'Ravi', 'age': 23, 'marks': 56}
+dict2 = dict(a)
+    
+
+```
+
+
+
+Reference： 1) Stack Overflow, [How does collections.defaultdict work?](https://stackoverflow.com/questions/5900578/how-does-collections-defaultdict-work)
+
+### Python Data Structure
+
+- Set
+- Tuple
+- List, Array, Queue, Stack
+- Dict, Maps, Hash Tables
+- Reference
+  - Offical Doc, https://docs.python.org/3/tutorial/datastructures.html
+  - 菜鸟教程, https://www.runoob.com/python3/python3-data-structure.html
 

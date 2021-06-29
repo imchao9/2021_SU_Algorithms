@@ -400,7 +400,7 @@ class Solution:
 
 C++ code:
 
-![image-20210624173702605](img/image-20210624173702605.png)
+![image-20210624173702605](./img/image-20210624173702605.png)
 
 
 
@@ -607,7 +607,7 @@ C++Code:
 
 
 
-### 84 模板题-柱状图中最大的矩形
+### 84 模板题-柱状图中最大的矩形–hard
 
 - 84 模板题-柱状图中最大的矩形https://leetcode-cn.com/problems/largest-rectangle-in-histogram/
 
@@ -648,7 +648,7 @@ C++ Code:
 
 ![image-20210625162525175](img/image-20210625162525175.png)
 
-### 239 模板题-滑动窗口最大值
+### 239 模板题-滑动窗口最大值–hard
 
 239 模板题-滑动窗口最大值https://leetcode-cn.com/problems/sliding-window-maximum/
 

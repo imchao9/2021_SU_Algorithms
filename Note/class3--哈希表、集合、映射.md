@@ -112,8 +112,13 @@ Python Code:
 - Dictionary/Map, https://www.runoob.com/python3/python3-dictionary.html
   - `map_a = {'Jack'=100, 'Candela'=90, '张三': 80}`
 
+- Python Collection Library, https://docs.python.org/3/library/collections.html
+- Python typing library, https://www.pythonsheets.com/notes/python-typing.html
 
 ## 实战
+
+### 两数之和
+
 1 两数之和, https://leetcode-cn.com/problems/two-sum/
 
 Note: 之前我们用了two pointers 的方法，这次要用HashTable的方法 ==> 这个思路要比双指针更简单
@@ -157,16 +162,76 @@ C++ Code:
 
 ![image-20210627011506179](img/image-20210627011506179.png)
 
-874 模拟行走机器人https://leetcode-cn.com/problems/walking-robot-simulation/
 
-```C++
+
+### 模拟行走机器人
+
+874 模拟行走机器人，https://leetcode-cn.com/problems/walking-robot-simulation/
+
+```python
 /*
 - 可以用set或者map存储障碍物，从而快速判断一个格子里有没有障碍
 - 利用方向数组简化实现(代替if)
 */
+class Solution:
+    def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:
+        """
+            方法一：暴力
+                - 因为the lenght of commands.length <= 10^4, and there are only 9 type of command, so the maximum length for command will just be pretty small. ==> So, it's find with brute force
+                - 这题重点是判断一个格子是不是障碍物，以及如何处理，左转右转这些方向：1）第一个方案就是用集合或者映射(hash Table); 2) 第二个就是用方向数组来代替if。
+                - 首先怎么知道一个格子是不是障碍物？==》 首先障碍物就是一些给定的坐标。==》 所以可以用a set of tuple to store those data points, e.g., {(x1, y1), (x2, y2)} ==> 
+                - Ways to hash tuple: 
+        """
+        # 有些语言的库只支持对string or int做哈希，那怎么hash一个坐标点呢？==》 1) Conver to string, e.g., "-200, 30000"， 2）Convert to int, e.g., long long: (-200, 300) -->  (-200+30000, 300+30000) --> (-200+30000)*60000 + 300 + 30000 （这里就是自己定义一个hash function, 意在吧二位数组转化成一位unmutable integer。+30000 就是偏移量，因为hash value不能是负数。*60000是x,y的最大偏移量。然后把x,y的范围从 -30000<x, y<30000 ==> 改成 0<x, y<30000， 然后再做一次变化，使得==> (x+30000)*60000 +(y+30000) ==> 无所谓，不需要理解，就是个hash function，不喜欢自己改掉或者直接掉包都行
+        blocker_dicts = set(map(tuple, obstacles))
+        # for obs in obstacles:
+        #     blocker_dicts.add((obs[0], obs[1]))
+        print(blocker_dicts)
+
+        # 定义方向数组 ==> 从北开始，顺时针方向
+        #       N, E, S, W
+        dir_x = [0, 1, 0, -1]
+        dir_y = [1, 0, -1, 0]
+        dir = 0     # indicate the direction code, where 0<dir<3
+        x, y = 0, 0 # denote as robot's current position
+        ans = 0     # denote as the largest euclidean distance
+        for cmd in commands:
+            if cmd>0:   # For moving command
+                for i in range(cmd):
+                    # 尝试走到nextx, nexty
+                    # 想向dir走一步，就加dir方向一步的偏移量
+                    nextx = x + dir_x[dir]
+                    nexty = y + dir_y[dir]
+                    # 如果踩到了有障碍物，就跳过
+                    if (nextx, nexty) in blocker_dicts:
+                        break
+                    else:
+                        x, y = nextx, nexty
+                        ans = max(ans, x**2+y**2)
+            elif cmd == -1: # 向右转90度
+                dir = (dir+1) % 4   
+                # N->E->S->W->N
+                #  0->1->2->3->0 
+            else: # 向左转90度,
+                dir = (dir-1 + 4) % 4
+                # 左转，避免负数，加一个mod数
+        return ans
+
+        # 复杂度分析
+        #   时间复杂度：O(N + K)，其中 N, K 分别是 commands 和 obstacles 的长度。
+        #   空间复杂度：O(K)，用于存储 obstacleSet 而使用的空间。
 ```
 
-49 字母异位词分组https://leetcode-cn.com/problems/group-anagrams/
+
+
+### 字母异位词分组
+
+49 字母异位词分组，https://leetcode-cn.com/problems/group-anagrams/
+
+Question:
+
+Idea:
+
 ```c++
 /*
 - 对字符串的分组就是用hash，让同一组的字符串拥有相同的hash值，然后用hash map分组
@@ -180,7 +245,28 @@ C++ Code:
 */
 ```
 
-30 串联所有单词的子串https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/
+Answer:
+
+Python Code:
+
+C++ Code:
+
+![image-20210627230645686](img/image-20210627230645686.png)
+
+
+
+### 串联所有单词的子串
+
+30 串联所有单词的子串，https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/
+
+Question:
+
+Idea:
+
+这题和前一天很相似。前一题是不管char的顺序，然后对一串char进行排序。==》 而这题一串word的顺序，然后对一串单词进行排序
+
+Answer:
+
 ```C++
 /*
 长度相同：滑动窗口长度固定
@@ -198,12 +284,83 @@ C++ Code:
         }
 ```
 
+![image-20210628013421165](img/image-20210628013421165.png)
+
+![image-20210628013454862](img/image-20210628013454862.png)
 
 
+
+### !!! 146. LRU 缓存机制–Medium-高频题
+
+- 146. LRU 缓存机制， https://leetcode-cn.com/problems/lru-cache/
+
+Question:
+
+Idea：
+
+Code:
+
+```python
+class LRUCache(object): 
+	def __init__(self, capacity): 
+		self.dic = collections.OrderedDict() 
+		self.remain = capacity
+
+	def get(self, key): 
+		if key not in self.dic: 
+			return -1 
+		v = self.dic.pop(key) 
+		self.dic[key] = v   # key as the newest one 
+		return v 
+
+	def put(self, key, value): 
+		if key in self.dic: 
+			self.dic.pop(key) 
+		else: 
+			if self.remain > 0: 
+				self.remain -= 1 
+			else:   # self.dic is full
+				self.dic.popitem(last=False) 
+		self.dic[key] = value
+```
+
+
+
+## 作业
+
+
+
+```python
+class Solution:
+    def subdomainVisits(self, cpdomains: List[str]) -> List[str]:
+        """
+            这题考察的有三个点：1）意识到要用HashTable的映射来解题；2）熟练掌握str和dict之间的转化；3)了解collections里可用的包
+        """
+        ans = {}    # Or ans = collections.Counter()
+        for text in cpdomains:
+            count, domain = text.split(' ') # "9001 discuss.leetcode.com" => "9001" and " discuss.leetcode.com"
+            count = int(count)  # "9001" => 9001
+            fragments = domain.split('.')   # "discuss.leetcode.com" => ['discuss', 'leetcode', 'com']
+            for i in range(len(fragments)): # ['discuss', 'leetcode', 'com'] => {'discuss.leetcode.com': 9001, 'leetcode.com': 9001, 'com': 9001})
+                key = '.'.join(fragments[i:])
+                if key not in ans:
+                    ans[key]=count
+                else:
+                    ans[key]+=count
+                # ans[key] += count ==> Use this if you declared ans with collections.defaultdict(int)
+        print(ans)
+        return [f"{value} {key}" for key, value in ans.items()]
+
+# 复杂度分析
+# 时间复杂度：O(N)，其中 N 是数组 cpdomains 的长度，这里假设 cpdomains 中每个元素的长度都是常数级别的。
+# 空间复杂度：O(N)，用于存储哈希映射。
+
+```
 
 
 
 ## set、map的使用及其特性和区别
+
 STL总共实现了两种不同结构的管理式容器：树型结构与哈希结构。树型结构的关联式容器主要有四种：set，map，multiset，multimap。下面介绍一下这四种容器的简单使用。
 
 ### 1.set
