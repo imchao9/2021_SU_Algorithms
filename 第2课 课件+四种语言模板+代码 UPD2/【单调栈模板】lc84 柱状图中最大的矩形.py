@@ -1,7 +1,7 @@
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
-        heights.append(0) # 帮助我们在最后把栈清空
-        stack = [] # [[height, width], ...]
+        heights.append(0)  # 帮助我们在最后把栈清空
+        stack = []  # [[height, width], ...]
         ans = 0
         # 每个柱子入栈、出栈各一次，2n=O(n)
         # 第一步：for 每个元素
@@ -15,3 +15,6 @@ class Solution:
             # 第三步：新元素入栈
             stack.append([h, accumulated_width + 1])
         return ans
+
+
+

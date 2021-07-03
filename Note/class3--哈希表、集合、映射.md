@@ -164,7 +164,7 @@ C++ Code:
 
 
 
-### 模拟行走机器人
+### !!! 模拟行走机器人–Easy
 
 874 模拟行走机器人，https://leetcode-cn.com/problems/walking-robot-simulation/
 
@@ -230,24 +230,53 @@ class Solution:
 
 Question:
 
+![image-20210629162043404](img/image-20210629162043404.png)
+
 Idea:
 
-```c++
-/*
-- 对字符串的分组就是用hash，让同一组的字符串拥有相同的hash值，然后用hash map分组
-- 思路1：重新排序-->分组-->提取到ans
-    - map<string, group>
--思路2: 统计每个字符串中每个字母的出现的次数，把长度为26的计数数组作为key
-    - map<array[26], group>
-- 熟悉map的用法
-- 字符串排序
-- map的插入
-*/
+Python Code:
+
+```python
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        """
+            方法一：HashMap/Dict
+            这题的关键就是用hashmap来分组。观察输入，与输出的实例，可以注意到，同一组的字符串就是顺序不一样。所以，经过排序后，相同顺序的字符串会在同一组。e.g., ["ate","eat","tea"] ==> "aet"
+            ==> 因此可以定义一个从str 到 List[str]的映射，e.g., "aet"==>["ate","eat","tea"]
+            ==> Implementation: 
+                1) Iterate over the strs, to build a HashMap: str ==> List[str]
+                2) Iterate over the HashMap, and store the data to a List[List[str]] 
+            
+            方法二：用长度为26的计数数组，来统计每个字符串中每个字母出现的次数，然后作为key来存, map<array<26, int>, group>, python 里就是 key: tuple => value: list[str] 
+        """
+        str_group = collections.defaultdict(list)
+        for str in strs:
+            key = ''.join(sorted(str))
+            str_group[key].append(str) 
+            print(f"Added str: {str} into group: {key}")
+        
+        ans = []
+        for group in str_group:
+            ans.append(str_group[group])
+        return ans
+
+# ===============下面是别人的高解
+"""
+        mp = collections.defaultdict(list)
+        for st in strs:
+            key = "".join(sorted(st))
+            mp[key].append(st)
+        
+        # Return the HashMap as a list of list   
+        return list(mp.values())
+
+# 作者：LeetCode-Solution
+# 链接：https://leetcode-cn.com/problems/group-anagrams/solution/zi-mu-yi-wei-ci-fen-zu-by-leetcode-solut-gyoc/
+
+"""
 ```
 
-Answer:
 
-Python Code:
 
 C++ Code:
 
@@ -255,34 +284,112 @@ C++ Code:
 
 
 
-### 串联所有单词的子串
+### 串联所有单词的子串–Hard
 
 30 串联所有单词的子串，https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/
 
 Question:
 
+![image-20210629162022433](img/image-20210629162022433.png)
+
 Idea:
 
 这题和前一天很相似。前一题是不管char的顺序，然后对一串char进行排序。==》 而这题一串word的顺序，然后对一串单词进行排序
 
-Answer:
+Python Code:
 
-```C++
-/*
-长度相同：滑动窗口长度固定
-中间不能有其他字符：连续判定word
-不需要考虑顺序：hash
-思路： 比较滑动窗口的map和输入的words的map是否相等，考虑单词的重复
-滑动窗口
-    - 窗口size = words.size() * words[0].size()
-对words建hash map */
-    - // words的单词到次数的映射
-        unordered_map<string, int> word_to_times;
-        for (string& word : words)
-        {
-            word_to_times[word] += 1；
-        }
+```python
+from collections import Counter
+class Solution:
+    """
+    方法一：枚举字串里的所有起始位置
+        ==》 O（len(s)*len(one_word) )
+    """
+    # 不要把所有的code都放到一个function里，要学会modularize（模块化)
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        ans = []
+        # 这题解法的重点就是要用HashTable + 统计思想 + 滑窗 ==》 所以先把正确的map打出来：correct_map<word: str, count: int>
+        correct_map = {x:words.count(x) for x in words}
+        # print(correct_map)
+        # 枚举开始位置，考虑所有可能的子串
+        window_size = len(words[0])*len(words) # length_of_single word * # of words
+        m = len(words[0])   #  每个单词的长度
+        for i in range(len(s)-window_size+1):
+            if(self.is_same(s[i:i+window_size], correct_map)):
+                ans.append(i)
+        return ans 
+
+    # 想判断一个字符串是否由words拼成, 把字串分解成若干个单词，然后看跟给定的dict是否相同（顺序无关）, e.g., is "foobar" made of ["foo", "bar"]？
+    def is_same(self, substr: str, correct_map: Dict[str, int]) -> bool:
+        # return a dict<s: str, count: int>, e.g., ["foo", "bar"] ==> {"foo": 1, "bar": 2}
+        cur_map = collections.defaultdict(int)
+        m = len(list(correct_map.keys())[0])
+        # 把t，每m个字符分解成一个单词, e.g., foothe 分解为 foo, the
+        for i in range(0, len(substr), m):
+            cur_map[substr[i:i+m]] += 1
+        # print(f"cur_map: {cur_map}, correct_map: {correct_map}")
+        return self.is_equal(cur_map, correct_map)
+
+    # 判断两个map是否一样的方法:1) 先比较size，再看a是否是b的subset; 2) if a is subset of b and b is subset of a, then a == b
+    # a.size() == b.size()
+    # a里面有的b里全有，且值一样
+    def is_equal(self, a: Dict[str, int], b: Dict[str, int]) -> bool:
+        if len(a)!= len(b):
+            return False
+        for key in a.keys():
+            if key not in b.keys() or a[key]!=b[key]:
+                return False        
+        return True
+
+
+    """
+    方法二：美剧部分起始位置+滑动窗口
+        ==》 O（len(s)*len(one_word) )
+    """
+    def findSubstring2(self, s: str, words: List[str]) -> List[int]:
+        ans = []
+        # 这题解法的重点就是要用HashTable + 统计思想 + 滑窗 ==》 所以先把正确的map打出来：correct_map<word: str, count: int>
+        correct_map = {x:words.count(x) for x in words}
+        word_len = len(words[0])
+        total_len = word_len * len(words)
+        for i in range(word_len):
+            if i+total_len>len(s):
+                break
+            # 搭建current substring's word map
+            s_map = collections.defaultdict(int)
+            cur = i
+            for i in range(len(words), word_len):
+                s_map[s[i:i+m]]+=1
+
+            start, end = i, cur
+            while(start+total_le n<=n):
+
+                start+=m
+                end+=m
+
+    # 想判断一个字符串是否由words拼成, 把字串分解成若干个单词，然后看跟给定的dict是否相同（顺序无关）, e.g., is "foobar" made of ["foo", "bar"]？
+    def is_same(self, substr: str, correct_map: Dict[str, int]) -> bool:
+        # return a dict<s: str, count: int>, e.g., ["foo", "bar"] ==> {"foo": 1, "bar": 2}
+        cur_map = collections.defaultdict(int)
+        m = len(list(correct_map.keys())[0])
+        # 把t，每m个字符分解成一个单词, e.g., foothe 分解为 foo, the
+        for i in range(0, len(substr), m):
+            cur_map[substr[i:i+m]] += 1
+        # print(f"cur_map: {cur_map}, correct_map: {correct_map}")
+        return self.is_equal(cur_map, correct_map)
+
+    def is_equal(self, a: Dict[str, int], b: Dict[str, int]) -> bool:
+        if len(a)!= len(b):
+            return False
+        for key in a.keys():
+            if key not in b.keys() or a[key]!=b[key]:
+                return False        
+        return True
 ```
+
+
+
+C++ Code:
 
 ![image-20210628013421165](img/image-20210628013421165.png)
 
@@ -292,11 +399,7 @@ Answer:
 
 ### !!! 146. LRU 缓存机制–Medium-高频题
 
-- 146. LRU 缓存机制， https://leetcode-cn.com/problems/lru-cache/
-
-Question:
-
-Idea：
+- 146. LRU 缓存机制， https://leetcode-cn.com/problems/lru-cache/， ==**老师给的模板**== https://shimo.im/docs/VrZCLACWhc8IoDTH/read
 
 Code:
 
@@ -328,7 +431,131 @@ class LRUCache(object):
 
 ## 作业
 
+### !!! 146. LRU 缓存机制–Easy
 
+- [146. LRU 缓存机制](https://leetcode-cn.com/problems/lru-cache/)
+
+Question:
+
+![image-20210629161637842](img/image-20210629161637842.png)
+
+Code:
+
+```python
+class LRUCache(object):
+    # 模板答案: 
+    # 思路的重点就是找到一个“具有时间顺序的数据结构”，能够像Queue一样维持数据顺序，且能像Dict一样快速loopup, delete, and insert
+    def __init__(self, capacity):
+        self.dic = collections.OrderedDict()
+        self.capacity = capacity
+        
+    def get(self, key):
+        # If key doesn't exist
+        if key not in self.dic:
+            return -1 
+        # Key exist
+        v = self.dic.pop(key)
+        self.dic[key] = v   # update key as the newest one 
+        return v 
+
+    def put(self, key, value): 
+        # If key already exist
+        if key in self.dic:
+            self.dic.pop(key)
+            self.dic[key] = value
+        else:
+            self.dic[key] = value
+        if len(self.dic) > self.capacity:
+            self.dic.popitem(last=False)   
+        # Note: OrderedDict popitem removes the items in FIFO(like a queue) order. It accepts a boolean argument last, if it’s set to True then items are returned in LIFO order.
+
+# 因为python里有一种collections.OrderDict()的dict可以维持时间顺序，所以不需要linked list
+# ============下面是普通版本的解法
+class LRUCache1:
+    """
+        Data Strcutre: Hashtable<key: int, value: Node>  + Doubly Linked List
+        # Why Hashtable? ==> 主要用来实现一个从key to DLL's Node的映射. 另外，it supports O(1）for lookup, insert, delete
+        # Why DLL? ==> Dict没有时间观念，所以要用DLL来维护时间顺序。另外，因为需要中间删除，所以要用双向链表，而不是单向的，或者栈这些数据结构
+    """
+    def __init__(self, capacity: int):
+        # Initialize the capacity and the HashTable that use to store datas
+        self.capacity = capacity
+        self.map = {}   # map<value: int, node: Node>
+        # Initialize 带有保护节点的双向链表
+        self.head = Node()
+        self.tail = Node()
+        self.head.next = self.tail
+        self.tail.pre = self.head
+        
+    # 就考虑两种情况：1）不存在；2）存在
+    def get(self, key: int) -> int:
+        if key not in self.map: # 不存在的情况 ==》题目要求，返回-1
+            return -1
+        # 存在的情况：直接从map里拿出啦，然后返回其value。因为我们选用了DLL来维护时间顺序，所以还用从把对应的Node移到最前面
+        node = self.map[key]
+        result = node.value
+        self.remove_from_list(node)
+        self.insert_to_list_head(node.key, node.value)
+        return result
+    
+    # 一样的，考虑两种情况：1）存在，2）不存在
+    def put(self, key: int, value: int) -> None:
+        # 存在的情况：啥都不用改，直接update时间顺序就好了
+        if key in self.map:
+            node = self.map[key]
+            self.remove_from_list(node)
+            self.insert_to_list_head(key, value)
+        else: # 不存在，就加入到map 和双链表里
+            self.insert_to_list_head(key, value)
+        
+        if len(self.map)>self.capacity:
+            self.remove_from_list(self.tail.pre)
+
+    # 从DLL里移除一个node，就是直接把他pass掉就好了
+    def remove_from_list(self, node):
+        node.pre.next = node.next
+        node.next.pre = node.pre
+        del self.map[node.key]
+        # self.map.pop(node.key)
+
+    def insert_to_list_head(self, key, value):
+        node = Node(key, value)
+        # node 与 下一个点先建立关系
+        node.next = self.head.next
+        node.next.pre = node
+        # node再与head建立关系
+        node.pre = self.head 
+        self.head.next = node
+        # synchronize the map as well
+        self.map[key] = node
+        return node
+
+class Node:
+    def __init__(self, key=None, value=None, pre=None, next=None):
+        self.key = key
+        self.value = value
+        self.pre = pre
+        self.next = next
+
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+```
+
+
+
+### !!! 811. 子域名访问计数
+
+- [811. 子域名访问计数](https://leetcode-cn.com/problems/subdomain-visit-count/)
+
+  Question
+
+  ![image-20210629161234064](img/image-20210629161234064.png)
+
+  Code:
 
 ```python
 class Solution:
@@ -356,6 +583,10 @@ class Solution:
 # 空间复杂度：O(N)，用于存储哈希映射。
 
 ```
+
+
+
+
 
 
 
