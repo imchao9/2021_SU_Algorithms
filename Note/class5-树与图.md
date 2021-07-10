@@ -11,11 +11,11 @@
 
 - Some common terminology: Root, Parent Node, Child Node, Sibling, Sub-tree, Left-Node
 
-![image-20210704121012471](img/image-20210704121012471.png)
+![image-20210709224900088](img/image-20210709224900088.png)
 
 - How to define a TreeNode in different language?
 
-![image-20210704120915353](img/image-20210704120915353.png)
+![image-20210709224915013](img/image-20210709224915013.png)
 
 ## 二叉树 Binary Tree
 
@@ -27,6 +27,8 @@
   - A complete Binary Tree is a binary tree where 1) All the internal nodes have EXACTLY two children; 2)and all leaves are at the same distance from the root.
   - ![image-20210704121908449](img/image-20210704121908449.png)
 - 树如何遍历？遍历的重点就在于用递归的方式来实现
+  - 下图就是多叉树的遍历。可以看到，从每一个叶子节点到根节点之间的路径，都是我们想要的全排列，也就是我们需要存储的东西。这个例子的结束条件是当 ‘root == None‘, 也就是当节点没有child node时。
+  - ![image-20210710102604978](img/image-20210710102604978.png)
 
 Property of BST(Binary Search Tree)
 

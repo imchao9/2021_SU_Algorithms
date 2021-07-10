@@ -114,9 +114,7 @@ In **recursion**, the function calls itself until it reaches a base case. In **b
 
 递归就要有终止条件，所以必然是一颗高度有限的树（N叉树）。
 
-
-
-
+![image-20210710101016420](img/image-20210710101016420.png)
 
 ### 回溯法模板
 
@@ -137,25 +135,19 @@ class Solution:
     
     def backtracking(参数):
         # 回溯函数终止条件: 什么时候达到了终止条件，树中就可以看出，一般来说搜到叶子节点了，也就找到了满足条件的一条答案，把这个答案存放起来，并结束本层递归。
-        if (终止条件):
-            存放结果
+        if (满足终止条件):
+            self.ans.append(路径)	# 存放结果
             return
         # 回溯搜索的遍历过程: 回溯法一般是在集合中递归搜索，集合的大小构成了树的宽度，递归的深度构成的树的深度. for循环就是遍历集合区间，可以理解一个节点有多少个孩子，这个for循环就执行多少次。
         for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）):
-            处理节点;
+            做选择，处理节点;
             backtracking(路径，选择列表); # backtracking这里自己调用自己function signature，实现递归。
             回溯，撤销处理结果
 ```
 
 
 
-Reference:
-
-- 关于回溯算法，你该了解这些， https://mp.weixin.qq.com/s/gjSgJbNbd1eAA5WkA-HeWw
-- 带你学透回溯算法（理论篇）| 回溯法精讲！https://www.bilibili.com/video/BV1cy4y167mM/
-- 二叉树：一入递归深似海，从此offer是路人，https://mp.weixin.qq.com/s/PwVIfxDlT3kRgMASWAMGhA
-
-## 
+- 
 
 ### 实战例题：
 
@@ -390,7 +382,7 @@ class Solution:
 
 
 
-#### 47. 全排列 II
+#### !!! ==47. 全排列 II==
 
 - 47. 全排列 II, https://leetcode-cn.com/problems/permutations-ii/
 
@@ -440,7 +432,12 @@ class Solution:
 
 ![image-20210701141254320](img/image-20210701141254320.png)
 
+#### **Reference:**
 
+- 关于回溯算法，你该了解这些， https://mp.weixin.qq.com/s/gjSgJbNbd1eAA5WkA-HeWw
+- 带你学透回溯算法（理论篇）| 回溯法精讲！https://www.bilibili.com/video/BV1cy4y167mM/
+- 二叉树：一入递归深似海，从此offer是路人，https://mp.weixin.qq.com/s/PwVIfxDlT3kRgMASWAMGhA
+- 回溯思想团灭排列、组合、子集问题, https://leetcode-cn.com/problems/subsets/solution/hui-su-si-xiang-tuan-mie-pai-lie-zu-he-zi-ji-wen-t/
 
 ## 树
 
