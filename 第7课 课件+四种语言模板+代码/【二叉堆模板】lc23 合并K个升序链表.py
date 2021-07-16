@@ -14,7 +14,7 @@ class BinaryHeap:
     def __init__(self):
         # 数组存储完全二叉树
         # 从索引0开始存
-        self.heap = [];
+        self.heap = []
 
     def empty(self):
         return len(self.heap) == 0
@@ -37,7 +37,7 @@ class BinaryHeap:
     def heapifyUp(self, p):        
         while p > 0:
             fa = (p - 1) // 2
-            if self.heap[p].key < self.heap[fa].key: # 小根堆
+            if self.heap[p].key  < self.heap[fa].key: # 小根堆
                 self.heap[p], self.heap[fa] = self.heap[fa], self.heap[p]
                 p = fa
             else:
@@ -51,7 +51,7 @@ class BinaryHeap:
             # child存较小的孩子
             if otherChild < len(self.heap) and self.heap[child].key > self.heap[otherChild].key:
                 child = otherChild
-            # 让child跟p比较
+            # 让child跟p比较whil
             if self.heap[p].key > self.heap[child].key:  # 小根堆
                 self.heap[p], self.heap[child] = self.heap[child], self.heap[p]
                 p = child
