@@ -1,5 +1,7 @@
 # Thins to remember/review:
 
+- 写一个程序，不用管从那开始，想到啥先写啥，把所有relevant information先写上去，不会代码就写思路，思路清晰之后在考虑具体实现的代码。==》loop是要考虑每一步该如何走，往哪走，你的终止条件是什么？变化的信息/state有哪些？要收集的信息有哪些？最后在哪里返回？
+
 - What make a good hashTable?
 
   - 好的哈希函数有两个特点：简单，均匀性。所谓<u>简单就是可以很快地产生一个较好的 hash 值</u>，<u>均匀性是指所有的数据可以均匀地映射到各个 hash 值上，避免产生大部分数据映射到少数的 hash 值上</u>。开散列法表头数组变大，冲突可能性会降低，因为可以映射到的组变多了。开散列法的哈希表删除元素与插入操作类似。
@@ -72,9 +74,9 @@
   - What is pass by sharing in Python:  ==> 简单来说就是下图。它和 ”copy-by-value” and “copy by reference” 都不一样。C是”copy-by-value”，当pointer被pass to caller, an exact copy will be created. However, in python, it’s using “copy by sharing”, so a new address/reference will be created.  More details refers to this, https://www.python-course.eu/python3_passing_arguments.php
   - <img src="img/image-20210623000141850.png" alt="image-20210623000141850" style="zoom:200%;" />
 
-- 遇事不决先枚举。。。
+- 遇事不决先枚举, 然后画图。。。
 
-- for, while loop枚举时，一定要注意处理越界的情况
+- for, while loop枚举时，access array index时，都要注意处理考虑越界的情况
 
 - 程序如果看不懂，直接打印log出来，看都干了啥
 

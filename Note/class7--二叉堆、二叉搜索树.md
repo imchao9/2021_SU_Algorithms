@@ -35,11 +35,34 @@ How to insert a new element?
 
 
 
+Some Heap Implementation trick in Python:
+
+- How to quickly inverse a minHeap to maxHeap? 
+
+  if you are dealing with a list, you can do this:
+
+  ```python
+  # Just add a negative sign in front of each element
+  nums = [-n for n in nums]	
+  # Referemce: Max Heap in Python, https://leetcode.com/problems/sliding-window-maximum/discuss/1140917/Max-Heap-in-Python
+  ```
+
+  If you are dealing with an object:
+
+  ```python
+  setattr(ListNode, "__lt__", lambda self, other: self.val <= other.val)
+  # Reference: “heapq python how to use comparator” Code Answer, https://www.codegrepper.com/code-examples/python/heapq+python+how+to+use+comparator
+  - 
+  ```
+
+  
+
 Reference: 
 
 - OSU 2331 resource, [Heaps and Heapsort](http://web.cse.ohio-state.edu/software/2231/web-sw2/extras/slides/14.Heaps-Heapsort.pdf)
-
-
+- GeeksforGeek, Heapq with custom predicate in Python, https://www.geeksforgeeks.org/heapq-with-custom-predicate-in-python/
+  - Min Heap in Python, https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
+- Python heapq, https://docs.python.org/3/library/heapq.html
 
 ## 实战例题
 
