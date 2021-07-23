@@ -202,12 +202,16 @@ Why we have -1 and n-1 here, but use 0 and n in previous template? ==> 1) Becaus
 
 Wouldn’t that be a problem when computing the mid? ==> No, because we are using (left + right + 1), so the edge case will be (-1 + 0 + 1=0)
 
-总结：
+### 总结：
 
-- 步骤：第一个决定when condition is satified and we should start to shrink our range，第二步决定left and right的取值范围
+- Step 1：决定what is the condition? Are we looking for a lower bound, or upper bound?
+- Step 2: If condition is satisfied, which direction we should go to shrink our range 
+- Step 3: If  you have `left=mid`, be sure to add +1 when computing mid ==> Otherwise you might have infinite loop, e.g., [3, 4). ==> 再求mid时, 我们一般用 round down 的操作，(r+l)//2, 这mid结果一般就会停在左边(因为left < right), 而(r+l+1)//2, 多加了个1，这就保证了mid会停在右侧，这样在找upper bound时就不会导致infinite
+- Step 4: The loop should stopped when left == right, but you should becareful whether you use left or right for intialized invalid case.
+- Step 5: Becareful for the index range for left and right, they should be in range between [0…n-1], but if the question asked for invalid return, e.g., return -1 or len(nums) if no target found, then you need to consider adding extra space。 ==》 若题目保证了有解，那就不用管了，范围就是[0…n-1], 若有无解的可能，就要看一些是在哪一侧(你求的是min还是max)，然后在哪一侧扩展1个单位表示无解(e.g., -1 or len(nums))
 - 1.1 + 1.2模板是不需要任何额外检查的，最高效的模板，而且保证终止于left==right, 而且还能处理那种不存在，要求返回-1的情况。但需要你注意多考虑些细节上的处理：1）reassign left/right的条件是什么？2）缩小的范围？（就是往左还是往右走？）3）是否要返回-1？使用1.2时，计算mid位置需要补+1；
-
-二分搜索之所以能从O(n)减小的O(log(n))的原因是，利用数组的顺序，每一次把数组分成两半，通过一个点的数值，来少考虑对另一半的查找。
+- 二分搜索之所以能从O(n)减小的O(log(n))的原因是，利用数组的顺序，每一次把数组分成两半，通过一个点的数值，来少考虑对另一半的查找。
+- 如果
 
 
 
@@ -623,6 +627,34 @@ class Solution1:
 | Google | Apple | Bloomberg |
 | :----: | :---: | :-------: |
 |   6    |   3   |     2     |
+
+![image-20210722154031487](img/image-20210722154031487.png)
+
+Python Code:
+
+```python
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+        while l < r:
+            mid = (l + r) // 2
+            print(f"Mid: {mid}, left: {l}, right: {r}")
+            if nums[mid] < nums[mid + 1]:
+                l = mid + 1
+            else:
+                r = mid 
+        return l
+
+# N = 4
+# (left = 0, right = 3)
+# mid = (0+3)//2 = 1
+# nums[1] < nums[2] ==> satisfy ==> peak is at right side of mid, left = mid + 1= 2
+# (left = 2, right = 3)
+# mid = (2+3)//2 = 2
+# nums[2] < nums[3] ==> not satisfy ==> peak is at left side of mid, right = mid = 2
+# (left == right == 2)
+# ==> break the loop, return left
+```
 
 
 
