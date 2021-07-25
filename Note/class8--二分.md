@@ -1,5 +1,3 @@
-
-
 ## 二叉搜索树(Binary Search Tree)
 
 
@@ -211,7 +209,18 @@ Wouldn’t that be a problem when computing the mid? ==> No, because we are usin
 - Step 5: Becareful for the index range for left and right, they should be in range between [0…n-1], but if the question asked for invalid return, e.g., return -1 or len(nums) if no target found, then you need to consider adding extra space。 ==》 若题目保证了有解，那就不用管了，范围就是[0…n-1], 若有无解的可能，就要看一些是在哪一侧(你求的是min还是max)，然后在哪一侧扩展1个单位表示无解(e.g., -1 or len(nums))
 - 1.1 + 1.2模板是不需要任何额外检查的，最高效的模板，而且保证终止于left==right, 而且还能处理那种不存在，要求返回-1的情况。但需要你注意多考虑些细节上的处理：1）reassign left/right的条件是什么？2）缩小的范围？（就是往左还是往右走？）3）是否要返回-1？使用1.2时，计算mid位置需要补+1；
 - 二分搜索之所以能从O(n)减小的O(log(n))的原因是，利用数组的顺序，每一次把数组分成两半，通过一个点的数值，来少考虑对另一半的查找。
-- 如果
+
+
+
+# 二分答案：
+
+- Idea: 将一个求最优解问题(求给定问题空间里的最大/最小值) ，转化成一个判定问题，只要这函数是单调的，就可以用二分法来解决。– 有点像猜数的方法，不断收缩解空间，最坏的情况就是把解空间都枚举一遍，或者说判定一遍，然后找到最后答案。
+- 二分答案，通常用于最优化问题的求解：
+  - 尤其是出在 ==“最大值最小”==，或“最小值最大”这类字眼的题目上
+  - 一般==第二个最==才是是我们最优解的目标，==第一个最==一般是题目给的一个限制条件(比如，限制划分出的子数组的和)
+- 对应的判定问题的条件，通常是一个不等式（这不等式就反映了，上述的限制条件)
+- 如果关于这个条件的合法情况具有”特殊单调性“，此时就可以使用==二分答案==法，把求最优解问题，转化成判定问题
+- 注意：二分法是在解空间具有单调性时，我们才能用，但如果解空间没有单调性，这时我们就需要用二分答案法（利用==二分+判定== 的方法，来快速求出最优解）
 
 
 
@@ -628,7 +637,7 @@ class Solution1:
 | :----: | :---: | :-------: |
 |   6    |   3   |     2     |
 
-![image-20210722154031487](img/image-20210722154031487.png)
+Question:![image-20210722154031487](img/image-20210722154031487.png)
 
 Python Code:
 
@@ -666,7 +675,22 @@ class Solution:
 | :----: | :---: |
 |   3    |   2   |
 
+Question:
 
+![image-20210724013533409](img/image-20210724013533409.png)
+
+Python Code:
+
+```python
+```
+
+
+
+
+
+
+
+## 二分答案问题
 
 ### [分割数组的最大值](https://leetcode-cn.com/problems/split-array-largest-sum/)（Hard)
 
@@ -680,6 +704,97 @@ class Solution:
 | :--: |
 |  5   |
 
+Question:
+
+![image-20210723233855737](img/image-20210723233855737.png)
+
+Idea:
+
+![image-20210724004902381](img/image-20210724004902381.png)
+
+把一个求解问题（“找m个子数组，使得各自和的最大值最小”)，转化成一个判定问题()，然后每次调用这个function来猜。
+
+这里我们的判定问题就是：在给定数组里(nums), 我们能分将这个数组分成m段，使得每段的和的最大值小于T. The function signature is given below:
+
+```python
+def isValid(nums: List[], m: int, T: int):
+    pass
+```
+
+Python Code:
+
+```python
+考察候选⼈的逻辑思维class Solution:
+    def splitArray(self, nums: List[int], m: int) -> int:
+        """
+        这题要求的是将一个数组分成m个子数组，使得这m个子数组各自哥的最大值最小，比如实例1：
+        输入：nums = [7,2,5,10,8], m = 2
+        这有4种分法：
+        [7] [2, 5, 10, 8]    max = 25
+        7       25
+
+        [7, 2], [5, 10, 8]  max = 23
+        9       23
+
+        [7,2,5] [10, 8]     max = 18    ==> Winner
+        14      18
+
+        [7, 2, 5, 10] [8]   max = 24
+        24              8
+
+        可以看到，做这题的方法就是，把一个求解问题（“找m个子数组，使得各自和的最大值最小”)，转化成一个判定问题(”在给定数组里--nums, 我们能分将这个数组分成m个子段，使得每子段和的最大值小于T”)，然后每次调用这个function来猜，问题可以转化这一个二分的猜数问题。
+        1) Let T = 20, 能否找到一个数组使得，
+        分成<=100的2组是否可行？可行。
+        7+2+5
+        10+8  1
+
+        分成<=20的2组是否可行？可行。
+        7+2+5
+        10+8
+
+
+        分成<=17的2组是否可行？不可行。
+        7+2+5
+        10
+        8
+
+        写完 isValid后，我们就有了一个判定条件（问题本身不单调，但是条件是单调的，这题目的难度就是思维的转化，能否想到用二分的方法来求解，如何转化问题），使得这个解空间具有特殊的单调性，或者说是一个单调分段0/1 函数--可以使解空间分成一半是True, 一半是False的0/1函数。比如，let T = 18, 如果isValid 返回Yes，that means 所有比18大的数都是有解的，那么我们还可以往左边逼近，缩小解空间，找看是否有比18更小的解，使得判定条件成里？ ==》 但如果返回的是NO，那说明我们猜的这个T太小了，左边没有符合要求的解，所以要往右边推进        
+        """
+        # Intialize left and right：如何初始left and right的值？==》首先我们要知道left and right代表的是什么，这题里，left表示解空间的下界，也就是最坏情况下，哪怕每个数分一组的话，那T也需要取数组里的最大值得哪个数，which is 10, 才能使得每个数分一组 (对于实例1来说)。我们要保证解空间在left and right范围内。
+        left, right = 0, 0
+        for i in range(len(nums)):
+            left = max(left, nums[i])   # Left代表解空间得下届：当每个数单独分一组的情况
+            right += nums[i]            # right 代表解空间的上届：当全部放在一起的情况
+        while left < right:
+            mid = (left+right)//2
+            # 判定条件是什么？我们要找的是什么？找的是loop第一次达到true的那个值，或者第一个使得判定问题isValid返回True的位置
+            if self.isValid(nums, m, mid):
+                # left, or right? ==> 因为找的是第一个，所以我们希望答案越小越好，或者就是找lower bound ==> So right
+                right = mid
+            else:
+                left = mid + 1
+
+        return right
+        # 求最有解问题是很难得，所以我们可以用贪心 + 二分的思维来枚举
+
+    # 判定：能否把nums分成不超过m组(groupCount <= m?)，当限制每组的和不超过T时(groupSum<= T) -- T就是每组和的上限，只要和不超过这个上限就可以一直放，我们就可以通过这个上限来寻找一个分组的方案
+    def isValid(self, nums: List[int], m: int, T: int) -> bool:
+        groupSum = 0	# 来记录一个subarray里的和
+        groupCount = 1	# 记录在满足Sum(subarray)<= T 的情况向下，需要使用的subArray 的数量 ==》 最后要拿来最判断的
+        for i in range(len(nums)):
+            if groupSum + nums[i] <= T:
+                groupSum += nums[i]	# 如果放进去不超过T，那就继续放
+            else:
+                groupCount += 1	# 超了的话要新开一组
+               	groupSum = nums[i]	# 然后重新开始计算subArray Sum
+        return (groupCount<=m) # group
+
+    # Summary：一开始我们是不知道从哪里开始分的。然后，我们通过理解题目，寻找一个判定问题，使得一个求最优解问题，变成了一个二分问题（用判定条件，使得解空间可以判定+枚举），所以二分答案的本质就是在解空间里，建立一个单调分段的0/1函数，其定义域就是解空间里所有要枚举的答案，值域就是0/1, 使得问题在这个函数上有一个可以用二分来查找的分界点。
+    # 可以看出来，这个hard题和374.猜数字这easy题的解法是一样的，难点就在于思维转化能力，或者知识迁移能⼒
+```
+
+
+
 
 
 ### [制作 m 束花所需的最少天数](https://leetcode-cn.com/problems/minimum-number-of-days-to-make-m-bouquets/)（Medium）
@@ -689,6 +804,59 @@ class Solution:
 | Facebook |  VMware  | Bloomberg | Salesforce |
 | :------: | :------: | :-------: | :--------: |
 |  Google  | 字节跳动 |   Adobe   |   Apple    |
+
+Question:
+
+![image-20210724150658572](img/image-20210724150658572.png)
+
+Idea:
+
+
+
+Python Code:
+
+```python
+class Solution:
+    def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
+        """
+            这题要找的是最少天数，又是一个求最优解问题。因为求最优解问题比较难，所以我们可以把它先转为判定问题，然后用二分法来解。
+            题目要求找摘m束花的最少天数，那我们的判定问题可以是：在T天之内，是否能制作m束花，且每束花是连续的k朵。 -- 花是越开越多的，T天如果可行，那么T+1, T+2,...天也一定可行的 -- 这就形成了我们二分需要的单调分段
+        """
+        MAX = 10**9 + 1                  # 题目给了bloomDay[i] 的范围：1 <= bloomDay[i] <= 10^9
+        left, right = 1, MAX     # left and right代表的是解空间的上下界，因为题目要求，无解时要返回-1，所以给right多加一个无解答案（why right? 因为1) 这题用的时lower bound 的模板, 2) 当条件不满足时，可以看到我们挪动的是left，就是left初始值不影响结果，找不到他会一直往右移动，直到left == right
+        while left < right:
+            mid = (left + right) // 2
+            if self.isValidOnDay(bloomDay, m, k, mid):  # mid day 可以制作出来 ==> Then anything greater then mid will also work. Since we are looking for the first day that satisfy the condition, or looking for the lower bound, so ==> right
+                right = mid
+            else:
+                left = mid + 1
+
+        # 题目要求，无解时要返回-1       
+        if left == MAX:
+            left = right = -1
+        return left
+
+
+
+        # 实现的判定问题：在T这一天是否可行？判断的是在T这一天的开花情况，是否能制作m段，长为k的连续段
+        # coding interview 考的就两个： 给一个问题能否有思路？（没思路就是算法基本功不扎实，还得多记），有了思路能否实现出来？（写不出来，就是代码能力不行，还要多刷题）
+    def isValidOnDay(self, bloomDay: List[int], m: int, k: int, T: int) -> bool:
+        consecutive_counter = 0     # 记录连续开的花的朵数，用来和k进行比较的
+        bouquet_counter = 0         # 记录制作的花束，用来和m进行比较
+        for i in range(len(bloomDay)):
+            if bloomDay[i] <= T:                # 说明第 i 朵花，已经到了开花时间
+                consecutive_counter += 1    
+                if (consecutive_counter==k):    # 当开花的朵数，达到k朵时，就可以制作一束花, 所以increment bouquet_counter, and 清零consecutive_count
+                    bouquet_counter += 1
+                    consecutive_counter = 0
+            else:       # 说明花没开：既然构不成连续段，那就要清零了
+                consecutive_counter = 0 
+
+        return bouquet_counter >= m         # 返回bool，能否做得出来，True: Yes, False: No
+
+        # 比如实例2：
+        # 7 天后：[x, x, x, x, _, x, x] ==》 isValidOnDay 1>=m??
+```
 
 
 
