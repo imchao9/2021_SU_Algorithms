@@ -122,6 +122,15 @@ Use a while loop to tracking the position of left and right pointer.
 
 
 
+Hoare Partition Animation: https://www.bilibili.com/video/BV1q64y1S7Ax
+
+- left index keep moving to the left, and right index keep moving to the right 
+- when they both stop, then it’s a time to perfrom swap
+- Keep doing this, until left == rigth
+- At that time, we will swap the last element with pivot
+
+
+
 ## 排序算法的稳定性问题
 
 
@@ -233,9 +242,267 @@ nums = [126814, 234217, 125479]
 
 
 
-Summary：
+**Summary：**
 
 这三个非比较累排序算法里，都大概了解思路就行了，唯一可能会用到的就是计数排序(counting sort), 因为在数字比较小的时候，它的效率还是很乐观的。
 
 
+
+# 实战例题
+
+## 排序
+
+### [排序数组](https://leetcode-cn.com/problems/sort-an-array/)（Medium
+
+- [排序数组](https://leetcode-cn.com/problems/sort-an-array/)（Medium）半年内出题频次：
+
+| Facebook | 字节跳动 | Amazon | 腾讯 |
+| :------: | :------: | :----: | :--: |
+|    2     |    12    |   6    |  2   |
+
+| 滴滴 |
+| :--: |
+|  2   |
+
+Question:
+
+![image-20210726155012231](img/image-20210726155012231.png)
+
+Idea:
+
+
+
+Python Code:
+
+```python
+class Solution1:
+    # 这个实现方法用到了Python's syntax sugar. The idea is the divide and conquer. Each time, we pick middle element(or random), and we put those number smaller thhat pivot in a group/List, and those number greater than pivot in a List, and concatenate them together at the end. ==> We recursively calling on left/smaller and right/greater group, until only one element left. 
+    # ==> This implementation required to create a new List, so has some space cost
+    def sortArray(self, nums: List[int]) -> List[int]:
+        return self.quickSort(nums)
+
+    def quickSort(self, nums):
+        if len(nums)<=1:
+            return nums
+
+        pivot = nums[len(nums)//2]
+        middle = [i for i in nums if i == pivot]
+        left = [i for i in nums if i < pivot]
+        right = [i for i in nums if i > pivot]
+        return self.quickSort(left) + middle + self.quickSort(right)
+
+        
+class Solution2:
+    # This implementation won't need extra space. That's is, we will sort list in-place.
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.quickSort(nums, 0, len(nums)-1)
+        return nums
+
+    def quickSort(self, nums: List[int], l: int, r: int):
+        if l >= r:
+            return
+        pivot = self.partition(nums, l, r)
+        self.quickSort(nums, l, pivot)
+        self.quickSort(nums, pivot+1, r)
+        
+    def partition(self, nums, l, r):
+        pivot = random.randint(l, r)
+        pivotVal = nums[pivot]  # 这一条不可以省掉，因为num[pivot]在while的过程中会变的呀，必须提前记录下来
+        # print(f"nums: {nums}")
+        # print(f"pivot: {pivot}")
+        # left index keep moving to the left, and right index keep moving to the right, when they both stop, then it’s a time to perfrom swap
+        while l <= r:
+            while nums[l] < pivotVal:
+                l += 1
+            while nums[r] > pivotVal:
+                r -= 1
+            # That means l and r cannot be moved any further, so we need to make a swap
+            print(f"nums: {nums}")
+            print(f"Stop when l: {l}, r: {r}")
+            if l <= r:
+                nums[l], nums[r] = nums[r], nums[l]
+                l += 1
+                r -= 1
+                print(f"l: {l}, r: {r}, pivot: {pivot}")
+        # 最后这个中枢值(pivot)不需要交换， 因为可以随机选然后跟着一起排，正因为这样那个位置的值会变，所以要提前记录下来; 也因为这样，所以while loop and 最后的if condition 里用的是 <=
+        return r
+
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.mergeSort(nums, 0, len(nums)-1)
+        return nums
+    
+    # mergerSort的思想就是分治算法，假设左边排好了，右边也拍好，那最后就直接merge就完了。 ==》 至于左边右边是怎么排好的，上层思维不用管，merge里都会完成的。你可以假设几个edge case e.g., nums=[4,3],然后带进mergeSort里看看，你会发现 merge() 里会把 [3] and [4] 两个按顺序排好的
+    def mergeSort(self, nums, left, right):
+        if left >= right:
+            return
+        mid = (left+right)//2
+        self.mergeSort(nums, left, mid)
+        self.mergeSort(nums, mid+1, right)
+        self.merge(nums, left, mid, right)
+    
+    def merge(self, nums, left, mid, right):
+        # 这用的就是two pointer 的思想，i 从第一段的头开始(也就是left)，j从第二段的头开始(也就是mid+1), 两个prt 一起向后移动，每一步，就把相对较小的那一个存起来，放到temp里。最后看看是哪一个指针还没有结束，说明剩下的都是比另一半要大的数(因为这一步时，我们是假设左右两端都是排到顺序的数组)，然后直接append到temp最后就完了。
+        temp = []
+        i = left
+        j = mid + 1
+        while i <= mid and j <= right:
+            if nums[i] <= nums[j]:
+                temp.append(nums[i])
+                i+=1
+            else:
+                temp.append(nums[j])
+                j+=1
+        while i<= mid:
+            temp.append(nums[i])
+            i+=1
+        while j<= right:
+            temp.append(nums[j])
+            j+=1
+        nums[left:right+1] = temp
+    # 这是老师给的模板
+
+```
+
+### [数组的相对排序](https://leetcode-cn.com/problems/relative-sort-array/)（Easy)
+
+- [数组的相对排序](https://leetcode-cn.com/problems/relative-sort-array/)（Easy）半年内出题频次：
+
+| Amazon |
+| :----: |
+|   3    |
+
+Question:
+
+![image-20210726014508567](img/image-20210726014508567.png)
+
+Idea:
+
+
+
+Python Code:
+
+```python
+class Solution:
+    def relativeSortArray(self, arr1: List[int], arr2: List[int]) -> List[int]:
+        """
+        方法一：计数排序
+        这题arr[i]的范围很小，1000以内，所以很适合计数排序
+        """
+        counter = [0] * 1001
+        for i in range(len(arr1)):
+            counter[arr1[i]] += 1
+        # print(counter)
+        # [2,3,1,3,2,4,6,7,9,2,19]
+        # counter = [0 1 3 2 1 0 1 1 0 1 0....]
+        #            0 1 2 3 4 5 6 7 8 9 10
+        result = []
+        for i in arr2:
+            result += [i] * counter[i]
+            counter[i] = 0
+
+        # 剩余的，在arr2中未出现过的，按照升序放在 arr1 的末尾
+        for i in range(len(counter)):
+            if counter[i]!=0:
+                result += [i]*counter[i]
+        
+        return result
+    
+    # Q: counter能否用hashMap 来实现？==》这题可以，但一般的题目不行，因为，hashMap的没有维护顺序。你最后复原到结果的时候，你需要数组index的顺序来还原。这题是要求你按照arr2的相对顺序，所以可以用，但一般情况下是不会给的，但也不一定总是按照index，正整数的顺序来排，所以还是要看题目来定。
+```
+
+
+
+### [合并区间](https://leetcode-cn.com/problems/merge-intervals/)（Medium）
+
+- [合并区间](https://leetcode-cn.com/problems/merge-intervals/)（Medium）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    56    |    25    |  19  |   36   |
+
+| Apple | Bloomberg | Google | eBay |
+| :---: | :-------: | :----: | :--: |
+|  18   |    16     |   14   |  5   |
+
+| Cisco | Twitter |
+| :---: | :-----: |
+|   4   |    3    |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+
+
+### [数组中的第 K 个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)（Medium）
+
+- [数组中的第 K 个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)（Medium）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    55    |    30    |  9   |   25   |
+
+| 高盛集团 | LinkedIn | Google | 腾讯 |
+| :------: | :------: | :----: | :--: |
+|    7     |    6     |   7    |  10  |
+
+| Shopee | Apple |
+| :----: | :---: |
+|   6    |   5   |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+
+
+### [货仓选址](https://www.acwing.com/problem/content/description/106/)（Easy）
+
+- [货仓选址](https://www.acwing.com/problem/content/description/106/)（Easy）（ACWing）
+
+
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+
+
+### [翻转对](https://leetcode-cn.com/problems/reverse-pairs/)（Hard） 
+
+- [翻转对](https://leetcode-cn.com/problems/reverse-pairs/)（Hard）半年内出题频次：
+
+| Amazon | Google | Bloomberg |
+| :----: | :----: | :-------: |
+|   8    |   3    |     2     |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
 
