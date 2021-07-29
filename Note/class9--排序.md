@@ -122,12 +122,86 @@ Use a while loop to tracking the position of left and right pointer.
 
 
 
-Hoare Partition Animation: https://www.bilibili.com/video/BV1q64y1S7Ax
+**Hoare Partition Animation**: https://www.bilibili.com/video/BV1q64y1S7Ax
 
 - left index keep moving to the left, and right index keep moving to the right 
 - when they both stop, then it’s a time to perfrom swap
 - Keep doing this, until left == rigth
 - At that time, we will swap the last element with pivot
+
+**Python 模板：**
+
+```python
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        self.quickSort(nums, 0, len(nums) - 1)
+        return nums
+    def quickSort(self, arr, l, r):
+        if l >= r:
+            return
+        pivot = self.partition(arr, l, r)
+        self.quickSort(arr, l, pivot)
+        self.quickSort(arr, pivot + 1, r)
+    def partition(self, a, l, r):
+        pivot = random.randint(l, r)
+        pivotVal = a[pivot]
+        while l <= r:
+            while a[l] < pivotVal:
+                l += 1
+            while a[r] > pivotVal:
+                r -= 1
+            if l <= r:
+                a[l], a[r] = a[r], a[l]
+                l += 1
+                r -= 1
+        return r
+```
+
+
+
+
+
+## 归并排序
+
+QuickSort vs MergeSort:
+
+- 归并排序：先排序左右子数组，然后合并两个有序数组
+  - 左右的排序都是靠递归实现的，（当两边都是单独元素时，就会调用merge来两个元素排好)
+  - 重点在merge, def merge(self, nums, l, mid, r)
+  - 时间复杂度：O(nlogn), 每一层有n个element，一共有logn层
+- 快速排序：先调配出左右子数组（选个pivot, 然后小的放一边，大的放一边), 然后对左右子数组分别进行排序 
+  - 重点在partition, 用two pointer把左右大小调配好, def partition(self, nums, l, r)
+  - 时间复杂度：O(nlogn), 每一层有n个element，一共有logn层
+
+**Python 模板：**
+
+```python
+def mergesort(nums, left, right):
+    if right <= left:
+        return
+    mid = (left+right) >> 1
+    mergesort(nums, left, mid)
+    mergesort(nums, mid+1, right)
+    merge(nums, left, mid, right)
+def merge(nums, left, mid, right):
+    temp = []
+    i = left
+    j = mid+1
+    while i <= mid and j <= right:
+        if nums[i] <= nums[j]:
+            temp.append(nums[i])
+            i +=1
+        else:
+            temp.append(nums[j])
+            j +=1
+    while i<=mid:
+        temp.append(nums[i])
+        i +=1
+    while j<=right:
+        temp.append(nums[j])
+        j +=1
+    nums[left:right+1] = temp
+```
 
 
 
@@ -440,6 +514,144 @@ Idea:
 
 Python Code:
 
+```python
+class Solution1:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        """
+        方法一：合并
+        这题的思路分几个步骤：
+        step1: 双关键字排序。每一个interval（区间）可以看成是个二元数组, e.g., [1,3],[2,6],[8,10],[15,18]。我们可以先按左端进行排序（这个已经排好就不用动了）。
+        """
+        intervals.sort(key=lambda interval: interval[0])
+
+        """
+
+         # Step 2: 合并
+            1） 要维护当前覆盖的最远端
+            2）如何判断一个区间是否需要延续？还是新成立一段？
+            3）看他的起点是在最远端之前还是之后？
+        [1,3],[2,6],[8,10],[15,18]
+        [1, 3]  当前覆盖最远端的是3
+        [2, 6]  因为2<=3, 当前覆盖的最远端，被延长到了6
+        
+        [8,10] ==> 因为8>6，所以这是第一个需要合并的数组（什么时候停止呢？==》当这个是最后一个，或者断开了），现在最远端被延长到了10
+
+        [15, 18] ==> 因为15 > 18, 所以断开了
+        ==》 因为没有下一个数组了，他就单独成了一个记录下来。
+
+        """
+        fartest = 0 # 用来维护最远端的点
+        ans = []
+        l, r = 0, 0
+        counter = 0
+        while counter<len(intervals):
+            if counter==0:
+                l = intervals[counter][0]
+                r = intervals[counter][1]
+            else:
+                num1 = intervals[counter][0] 
+                num2 = intervals[counter][1]
+                if num1 <= r:   # If condition satisfied, that means, we found a jointed interval, 那就要延续最远端的点
+                    if num2 > r:    # But we need to be careful some tricky case, e.g., [[1,4],[2,3]] ==> Should return [[1,4]], not [[1,3]]
+                        r = num2
+                else:   # 说明断开了，把这个区间当作一个全新的开始
+                    ans.append([l, r])  # 重开之前，先把旧的放进答案里
+                    l = num1
+                    r = num2
+            counter += 1
+        ans.append([l, r])
+        return ans
+
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        """
+        方法二： 差分
+        Note: One key things about sovling this question is the customize sorting function. Say if you have to sort a list of tuple, and want to sort it in increasing order based on first item, but inverse if you have a duplication, that is, if nums[i][0] = nums[j][0], we want the smaller one in their second item goes first, ===> For example nums = [(2, 3), (3, 4), (2, 4)] ==> [(2, 4), (2, 3), (3, 4)]
+        Use the following code, will do the trick:
+            nums.sort(key = lambda x: (x[0], -x[1]) )
+
+        差分的方法提供了一种简化的方式，来统计一个事件的发生经过。比如，有同一个事件发生在1~5处，那我们就只用在开头（index=1)处记录一次(+1)，在末尾下一个(index=6)处记录一次（-1）。 像这题的话，[1, 5] 就表示一个事件在1时开始，5时结束。这样一个事件的整个过程，就只需要这两个关键点来记录就行了，
+        /*[1, 5]  [2, 6] [3, 4] [6, 10]  [11 12]
+
+           1 2 3 4 5 6 7 8 9 10 11 12
+           1 1 1 1 1
+             1 1 1 1 1
+               1 1
+                     1 1 1 1  1
+                                  1 1
+
+        # 用差分来统计事件的发生
+           +1      -1                   ==> (1, 1), and (6, -1)
+             +1      -1                 ==> (2, 1), and (7, -1)
+               +1-1                     ==> (3, 1) and (5, -1)
+                     +1        -1       ==> (6, 1) and (11, -1)
+                               +1 -1    ==> (11, 1) and (13, -1)
+        
+        Sort所有的事件， 
+        # 用一个计数器，来查看区间的覆盖情况
+        # count一开始为0，然后按照(+1/-1)的情况进行计算，当count再一次为0时，说明这个区间在这里中断了，前面就是一个覆盖的区间。之后还有的话，那就要重新计数，开始新的一个区间。
+
+        count: 0
+        把从1覆盖到5这个区间，看作2个事件：
+        (a) 在1处，有一个事件：开始覆盖（次数+1）
+        (b) 在5处，有一个事件：结束覆盖（次数-1）
+        """
+        
+        # Step1: 用差分法，来记录所有的2n个事件，开始和结束点。比如 [1, 5] 就代表了两个事件： 1）在时间点为1时开始；2）在时间点5时结束
+        # 时间位置，时间情况(+1/-1)
+        events = []
+        for interval in intervals:
+            events.append((interval[0], 1))  # 一个事件的开始
+            events.append((interval[1]+1, -1)) # 一个事件的结束
+        
+        # Step 2: 按时间顺序排好
+        # print(events)
+        events.sort(key=lambda event: (event[0], event[1])) # If you dont specify the second item in tuple, the default setting in Python will put the larger one first
+        # Notice: for case like [[1,4],[0,0]] ==> It should return [[0,0],[1,4]] not [[0,4]] ==> And this will cause problem, because, if two event happen at same time, e.g., (1, 1), (1, -1) ==> It will put the +1 event at first, and that will miscalculated ==> So, we need to adjust that mistake
+        # print(f"After Sorting: \n{events}")
+        
+        # Step 3: 开个计数器，来找每一个单独的区间
+        ans = []
+        left = 0
+        count = 0
+        for event in events:
+            if count == 0:   # 一个新区间的开始点
+                left = event[0]
+            count+=event[1]
+            if count == 0:   # 加完后，count变0了，就代表一个区间的结束
+                ans.append([left, event[0]-1])      
+
+        return ans
+
+        """
+        再来举个例子：
+            [[0,0],[1,4]]
+            0  1  2  3  4  5
+        Step 1: Creating events
+            +1-1                ==》 （0, 1) and (1, -1)
+                +1         -1   ==》 （1,1) and (5, 1)
+
+        Step 2: Sort all events ==> That's why we need to adjust the position of -1 and +1 when we have two event[i][0] are same
+        After Sorting: [(0, 1), (1, -1), (1, 1), (5, -1)] 
+
+        Step 3: counter the interval and get ans
+        count: [0, 0], [1, 4]
+
+
+        再来举个例子：
+            [[2,3],[5,5],[2,2],[3,4],[3,4]]
+            0  1  2  3  4  5  6
+            [(2, 1), (2, 1), (3, -1), (3, 1), (3, 1), (4, -1), (5, -1), (5, 1), (5, -1), (6, -1)]
+        
+        Step 1: Creating events     
+                  +1    -1
+                  +1  -1
+                     +1     -1
+                     +1     -1
+                            +1  -1
+        """
+```
+
 
 
 ### [数组中的第 K 个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)（Medium）
@@ -460,13 +672,61 @@ Python Code:
 
 Question:
 
-
+![image-20210729013330106](img/image-20210729013330106.png)
 
 Idea:
 
 
 
 Python Code:
+
+```python
+class Solution1:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+            方法一： 调包排序（最简单的写法） ==> O(nlogn)
+            第K大，就等于（排序后下标从0开始）第N-K小的元素 -- 因为default setting for sort is increasing order.
+        """
+        nums.sort()
+        return nums[len(nums)-k]
+    # 时间复杂度：O(nlogn)
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+            方法二：利用快排小技巧，可以把时间复杂度降到O(n)
+            快排假设序列已经分成了 [较小的p个数] [较大的n-p个数]
+            第n-k小的数在哪儿？ ==> 第K大，等于（排序后下标从0开始, 从小到大）第N-K小
+
+            ==> 复杂度：n + n/2 + n/4 + n/8 + ... <= 2n, so belongs to O(n)
+        """
+        return self.quickSort(nums, len(nums)-k, 0, len(nums)-1)
+
+    def quickSort(self, nums: List[int], k: int, left: int, right: int):
+        if left == right:
+            return nums[left]
+        pivot = self.partition(nums, left, right)
+        if pivot>= k:
+            return self.quickSort(nums, k, left, pivot)
+        else:
+            return self.quickSort(nums, k, pivot+1, right)
+    
+    def partition(self, nums, l, r):
+        pivot = random.randint(l, r)
+        pivotVal = nums[pivot]
+
+        while l <= r:   # !!! 1) Why l<=r?
+            while nums[l] < pivotVal:
+                l+=1
+            while nums[r] > pivotVal:
+                r -= 1
+            # Here is when l and r stop moving, then we make a swap
+            if l<=r:
+                nums[l], nums[r] = nums[r], nums[l]
+                l += 1
+                r -= 1
+        return r    # 2) Why return r?
+```
 
 
 
@@ -498,11 +758,106 @@ Python Code:
 
 Question:
 
-
+![image-20210729012949698](img/image-20210729012949698.png)
 
 Idea:
 
 
 
 Python Code:
+
+```python
+class Solution:
+    def reversePairs(self, nums: List[int]) -> int:
+        """
+        # Naive Solution: Brute force ==> O(n^2)
+
+        # 方法一：Merge Sort
+        思路：
+            - 注意到：一个“重要翻转对”的定义，需要满足两个条件，所以不能直接按数值来排序，要不然下标就乱了。如果下标拍好了，我们会发现数值就是乱序的，所以视乎这两条互相冲突的，只能二者满足其一。
+            - 所有的结果可以分成3种情况来考虑：1）所有(i, j)都在mid左边的且满足我们要求的“翻转对”； 2）都所有(i, j)在mid右边的且满足我们要求的“翻转对”；3）i在mid左边，然而j在mid右边的“翻转对”
+            - 想到归并排序，它的做法是不断二分，直到不能二分，就形成了有序序列（单个元素即算有序），然后不断合并两个有序序列。
+            - 这题里，其实我们不需要考虑第1 and 第2种情况。当不能再二分时，那每边就只有单个的元素，那归根结底就只有第三种情况。所以我们就假设左右都是排好序的，然后在merge前，通过考虑第三种情况，递归式的统计结果就完了。
+
+         nums: -----------|-------------
+         Left: ------------  | right: ------------
+
+        # 第三种情况3）==》 因为 i < j, 自动符合要求，所以只用担心数值之间的关系，是否满足要求。解决的方法，可以用two pointer, ptr1从left（or 0)开始， ptr2 从mid+1 开始。枚举i的位置，然后考虑右半段，有几个满足条件的j. 当我们找到第一个满足nums[i] > 2*nums[j] 时，我们就可以确定j之前的这些数，也就是mid~j 这一段也都一定满足要求。
+
+        # 这样划分的好处在哪呢？ ==》 1）这3个情况可以拆成几个子问题，然后递归解决；2）
+        首先我们知道下标是排好序的，
+        """
+
+        self.ans = 0
+        self.mergeSort(nums, 0, len(nums)-1) # why len(nums)-1? ==> Because we use index
+        return self.ans
+
+    def mergeSort(self, nums, left, right):
+        if left >= right:
+            return
+        mid = (left+right)//2
+        self.mergeSort(nums, left, mid)
+        self.mergeSort(nums, mid+1, right)
+        self.calculate(nums, left, mid, right)
+        self.merge(nums, left, mid, right)
+
+    def calculate(self, nums, left, mid, right):    # ==> 这里的具体实现需要模拟一次，有些小细节很容易错
+        # Use two pointers idea to count the number of ”重要反转对“: 枚举i的位置，然后考虑右半段，有几个满足条件的j. 当我们找到第一个满足nums[i] > 2*nums[j] 时，我们就可以确定j之前的这些数，也就是mid~j 这一段也都一定满足要求。
+        """
+        [0 1 2 | 3  4 5]
+        (i=left= 0, j=right = 5, mid = 2)
+        i = 0 
+        j = 3~5
+        j = 6
+        ans = j - (mid+1) = 6 - (2+1) = 3 ==> that's why we need (mid+1)
+        """
+        
+        i, j = left, mid+1
+        while i <= mid:
+            while j <= right and nums[i] > 2*nums[j]:
+                j+=1
+            self.ans += j-(mid+1)
+            i+=1
+
+    def merge(self, nums, left: int, mid: int, right: int):
+        # use two pointer to merge two list
+        temp = []
+        i, j = left, mid+1
+
+        # 把当前每一个元素都过一遍
+        # 实现方法1：一次for loop，each time only consider what goes to our final answer
+        # temp = [0] * (right-left+1)
+        # for k in range(right-left+1):
+        #     if j > right or # 考虑什么时候可以移动i呢？1）j > right, 右端都扫描完了；或者 2） i<mid and nums[i] <= nums[j], 左端还没结束，且都比当前j点的值要小。
+        #         temp[k] = nums[i]
+        #         i+=1
+        #     else:
+        #         temp[k] = nums[j]
+        #         j+=1
+        # 实现方法二：考虑哪一段先结束，然后append另外一段就完了
+        while i <= mid and j<= right:
+            if nums[i] < nums[j]:
+                temp.append(nums[i])
+                i+=1
+            else:
+                temp.append(nums[j])
+                j+=1
+        # Whil left side still have numbers remain
+        while i <= mid:
+            temp.append(nums[i])
+            i += 1
+        # Whil right side still have numbers remain
+        while j <= right:
+            temp.append(nums[j])
+            j += 1
+
+        # Copy sorted array back to nums, and free the memeory
+        nums[left:right+1] = temp
+
+        # Step 1:
+        # Step 2:
+        # Step 3:
+
+        # 总结：在一个数组中统计 满足特定大小关系的pair数量，可以考虑基于归并排 序来求解
+```
 
