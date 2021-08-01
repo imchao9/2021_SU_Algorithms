@@ -95,6 +95,15 @@
 
 - 做题时，要注意关注其中==**动态变化的**==数据 （题目给的那些数据是不会变的)
 
+- How to write a customized sorting algorithm?
+
+```python
+# 消耗(actual)小，门槛（minimum）大，是先做的条件、按actual + (-minimum)排序
+tasks.sort(key=lambda list: list[0]-list[1])
+```
+
+Reference, https://stackoverflow.com/questions/11850425/custom-python-list-sorting
+
 - How to implement Python \_\_lt\_\_ and \_\_gt\_\_ custom overloaded operator?
 
 ```python
