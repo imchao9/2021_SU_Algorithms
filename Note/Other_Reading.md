@@ -10,6 +10,16 @@
   - 算法作业收集表汇总， https://shimo.im/docs/5bqnr9KE7ghD7Wqy/read
   - 算法0期leetcode习题整理，https://shimo.im/docs/cP9RxQWRDGPpCcQR/read
   - 副本 算法训练营课程大纲，https://shimo.im/docs/GlgvDP18j68rhFWk
+  - 《算法作业批改表️》，https://shimo.im/sheets/8Nk6M2eYmxsYO2qL/Qw8gM/ 
+  - 
+- C++ API:
+  - cppreference.com, https://zh.cppreference.com/w/cpp/string/basic_string/insert
+- Python API
+- Java API:
+- Other Language:
+  - go语言技术栈方面的面试题、视频推荐, 面试题链接: https://pan.baidu.com/s/1uHpXHgBRYJcB2MOJ1m3N7w 提取码: v48k 复制这段内容后打开百度网盘手机App，操作更方便哦
+    毛大面试经验分享公开课链接：https://pan.baidu.com/s/1d4Ti_bbbaYBnd3z0JVDuzw 
+    提取码：bsxx	
 - 同学的note总结
   - [dcjyw9934](https://github.com/dcjyw9934)/algorithm，https://github.com/dcjyw9934/algorithm/tree/main/note
   - rayallen20/arithmetic, https://github.com/rayallen20/arithmetic

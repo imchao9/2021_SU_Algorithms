@@ -95,6 +95,53 @@
 
 - 做题时，要注意关注其中==**动态变化的**==数据 （题目给的那些数据是不会变的)
 
+- 
+
+
+
+## Python Tricks
+
+- Converting a list of list to a list of tuple:
+
+e.g., [[x1, y1], [x2, y2]] ==> {(x1, y1), (x2, y2)} 
+
+```python
+obstacleSet = set(map(tuple, obstacles))
+```
+
+https://leetcode-cn.com/problems/walking-robot-simulation/
+
+- How to sort a list of string?
+
+e.g., “bcda” ==> “abcd”
+
+```python
+ str = "bcda"
+''.join(sorted(str))
+```
+
+Reference: 1)Offical Doc, https://docs.python.org/3/library/collections.html#, 2)GeekForGeek, https://www.geeksforgeeks.org/defaultdict-in-python/, 3) Programiz, https://www.programiz.com/python-programming/methods/built-in/sorted
+
+- dict() vs Collections.defaultdict(list)
+
+a Python dictionary throws a `KeyError` if you try to get an item with a key that is not currently in the dictionary.
+
+However, the `defaultdict` in contrast will simply create any items that you try to access (provided of course they do not exist yet). In this case, default items are created using `list()`, which returns a new empty list object.
+
+- Converting between Dict() and list()
+
+```python
+dict1 = {'name': 'Ravi', 'age': 23, 'marks': 56}
+# Dict ==> List: [('name', 'Ravi'), ('age', 23), ('marks', 56)]
+list1 = list(d1.items())
+# List ==> Dict: {'name': 'Ravi', 'age': 23, 'marks': 56}
+dict2 = dict(a)
+    
+
+```
+
+Reference： 1) Stack Overflow, [How does collections.defaultdict work?](https://stackoverflow.com/questions/5900578/how-does-collections-defaultdict-work)
+
 - How to write a customized sorting algorithm?
 
 ```python
@@ -147,52 +194,26 @@ print(d5<d6)
 
 Reference， https://www.tutorialspoint.com/How-to-implement-Python-lt-gt-custom-overloaded-operators
 
+- ==**What is the correct way to initialize a 2D array in Python?**== ==> `[[0]*m for _ in range()]`
 
-
-## Python Tricks
-
-- Converting a list of list to a list of tuple:
-
-e.g., [[x1, y1], [x2, y2]] ==> {(x1, y1), (x2, y2)} 
+Don't use `[[v]*n]*n`, it is a trap!
 
 ```python
-obstacleSet = set(map(tuple, obstacles))
+>>> a = [[0]*3]*3
+>>> a
+[[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+>>> a[0][0]=1
+>>> a
+[[1, 0, 0], [1, 0, 0], [1, 0, 0]]
 ```
 
-https://leetcode-cn.com/problems/walking-robot-simulation/
-
-- How to sort a list of string?
-
-e.g., “bcda” ==> “abcd”
+but
 
 ```python
- str = "bcda"
-''.join(sorted(str))
+t = [ [0]*3 for i in range(3)]
 ```
 
-Reference: 1)Offical Doc, https://docs.python.org/3/library/collections.html#, 2)GeekForGeek, https://www.geeksforgeeks.org/defaultdict-in-python/, 3) Programiz, https://www.programiz.com/python-programming/methods/built-in/sorted
-
-- dict() vs Collections.defaultdict(list)
-
-a Python dictionary throws a `KeyError` if you try to get an item with a key that is not currently in the dictionary.
-
-However, the `defaultdict` in contrast will simply create any items that you try to access (provided of course they do not exist yet). In this case, default items are created using `list()`, which returns a new empty list object.
-
-- Converting between Dict() and list()
-
-```python
-dict1 = {'name': 'Ravi', 'age': 23, 'marks': 56}
-# Dict ==> List: [('name', 'Ravi'), ('age', 23), ('marks', 56)]
-list1 = list(d1.items())
-# List ==> Dict: {'name': 'Ravi', 'age': 23, 'marks': 56}
-dict2 = dict(a)
-    
-
-```
-
-
-
-Reference： 1) Stack Overflow, [How does collections.defaultdict work?](https://stackoverflow.com/questions/5900578/how-does-collections-defaultdict-work)
+Reference, [How to initialize a two-dimensional array in Python?](https://stackoverflow.com/questions/2397141/how-to-initialize-a-two-dimensional-array-in-python)
 
 ### Python Data Structure
 
