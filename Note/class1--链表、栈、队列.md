@@ -33,7 +33,7 @@
 
 Assumption
 
-- 用户declared 这个list后，肯定要储存至少一个element是吧 ==》但你作为executor, 你不可能用户每append 一个element, 你就要allocate a new memory, copy old data to new memory, then free old memory(重新分配、拷贝与释放这几个操作很浪费时间的，因为涉及到system call, I/O communication，memory scheduling) ==> 因此，在一开始你就要给用户预留些空间（e.g., 100byte, then when reach that limit, you are going to create a new space  that is twice larger, say 200 byte or 50% of old memory space — up to you, and copy all data to the new allocated memory space) 
+- 用户declared 这个list后，肯定要储存至少一个element是吧 ==》但你作为executor, 你不可能用户每append 一个element, 你就要allocate a new memory, copy old data to new memory, then free old memory(重新分配、拷贝与释放这几个操作很浪费时间的，因为涉及到system call, I/O communication，memory scheduling) ==> 因此，在一开始你就要给用户预留些空间（e.g., we give them 100byte at the beginning, then when reach that limit, you are going to create a new space  that is twice larger than the beginning, say 200 byte, and then you will copy all data to the new allocated memory space) 
   - ![image-20210626000741053](img/image-20210626000741053.png)
 - 理论上空间上可以push无数多个element，如果电脑内存足够大的话
 - 一个数组的容量, or memory space,（对用户不可见) 和用户实际使用大小是不一样的。 For example, in python, you can use check that sys.getsizeof(aList) != len(aList), https://stackoverflow.com/questions/17574076/what-is-the-difference-between-len-and-sys-getsizeof-methods-in-python
@@ -501,11 +501,16 @@ https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/
 #### 283.移动零 easy
 https://leetcode-cn.com/problems/move-zeroes/
 
+* Question:
+
+![image-20210809215705824](img/image-20210809215705824.png)
+
 * 主题思路：
+     
      - 什么时候要呢？==》从前往后遍历，不是0就要，指针++
      - 是否可以覆盖呢？==》可以，因为array is sorted, and n is always >= i.
      - Edge case:  如果n小于nums.size()，后面补0；
-
+     
 * 第二种思路：
 
   * 双指针，快指针每次都++
@@ -521,11 +526,9 @@ https://leetcode-cn.com/problems/move-zeroes/
             Method 2: In place
             Cost: Time: O(len(nums)), Space: O(len（nums)
             Idea:
-                
-    
             """
             n = 0   # 跟踪最后一个valid的数。 
-            for i in range(len(nums)):
+            for i in range(len(nums)):	
                 if nums[i] != 0: # 第一个肯定要。
                     nums[n] = nums[i]
                     n += 1
@@ -546,7 +549,7 @@ https://leetcode-cn.com/problems/linked-list-cycle/
   * 把链表过一遍，每个碰到的node，用一个hashmap来存，没次存的时候检测时候存过了，有相同，则说明有环；如果到最后都没有conflict，就说明无环。==》O(1) time, O(n) space, 
 * 快慢指针 ==》O(n) time, O（1）space,
   * ![image-20210621213403604](./img/image-20210621213403604.png)
-  * 相遇了则返回有环，不相遇返回无环
+  * 相遇了则返回有环，不相遇返回无环(无环的情况下，fast肯定会碰到nullptr，而停止下来)
   * 有环必定发生套圈（快慢指针相遇），无环不会发生套圈（快指针会先到达null，然后停下来)
   * 跟跑步套圈一样的。两个人跑步，跑得快的到终点了但没套圈，说明跑的时圆形的跑到；但如果套圈了，或再次碰上了，就说明跑的时圆形的跑道。
   * fastNode不一定非得只比head走得快一步，快3步，4步都行，只要成比例就行，但这样写简单些。==》是否有环总能检测出来，差距就是时间的问题。比如A 比 B快两倍，那A就跑到第二圈就会碰上B；但如果A只比B快1.5倍，那两者的最小公倍数是3，所以要经过3圈才能碰上；但如果A比B快3被，那经过1.5圈就能碰上了，但你能多加几个pointer，conditional statement就变长了，没必要自己给自己找麻烦。。。
@@ -566,6 +569,10 @@ https://leetcode-cn.com/problems/linked-list-cycle-ii/
 
 #### 206.反转链表 easy
 https://leetcode-cn.com/problems/reverse-linked-list/
+
+* Question
+
+![image-20210809220650117](img/image-20210809220650117.png)
 
 * 思路一：迭代
 
@@ -620,13 +627,12 @@ https://leetcode-cn.com/problems/reverse-linked-list/
 #### 25.K个一组翻转链表 hard
 https://leetcode-cn.com/problems/reverse-nodes-in-k-group/
 
+* Question:
 * 思路
-
   * seperate to k groups, and reverse each group
   * 处理group内部之间的关系 ==> 要看一般的情况，也就是中间部分。头和尾都是特殊的情况，都是细节和边界
   * 处理group headNode与上一组的关系
   * 处理group endNode与下一组的关系 
-
 * 分组，找到每一组的开始、结尾。按组遍历
 
 

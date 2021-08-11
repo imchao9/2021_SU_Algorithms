@@ -938,3 +938,111 @@ Python code:
 
 ```
 
+
+
+
+
+
+
+# 第 13 课: 动态规划的优化
+
+- [满足不等式的最大值](https://leetcode-cn.com/problems/max-value-of-equation/)（Hard）半年内出题频次：
+
+| Google |
+| :----: |
+|   15   |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python code:
+
+```python
+
+```
+
+
+
+
+
+- [环形子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-circular-subarray/)（Medium）半年内出题频次：
+
+| 字节跳动 |
+| :------: |
+|    2     |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python code:
+
+```python
+
+```
+
+
+
+
+
+## 区间动态规划
+
+- [戳气球](https://leetcode-cn.com/problems/burst-balloons/)（Hard）半年内出题频次：
+
+| Google | 字节跳动 | Bloomberg | Amazon |
+| :----: | :------: | :-------: | :----: |
+|   2    |    4     |     2     |   3    |
+
+
+
+Question:
+
+
+
+Idea:
+
+
+
+Python code:
+
+```python
+
+```
+
+
+
+
+
+
+
+- [合并石头的最低成本](https://leetcode-cn.com/problems/minimum-cost-to-merge-stones/)（Hard）半年内出题频次：
+
+| Amazon |
+| :----: |
+|   6    |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python code:
+
+```python
+
+```
+
+
+
