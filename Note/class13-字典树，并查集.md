@@ -148,6 +148,46 @@ Find(x): Return a reference to a representative element of the set containing x�
 
 
 
+Python Code
+
+```python
+class DisjointSet:
+    def __init__(self, n):
+        self.fa = [i for i in range(n)]
+    
+    # Return the representative node of x (e.g., root node)
+    def find(self, x):
+        if x == self.fa[x]:	# 只有root‘s fa 指向他自己
+            return x
+        self.fa[x] = self.find(self.fa[x])	# 递归回来的结果就是root，回溯时赋值root到每个经过的节点，实现路径压缩
+        return self.fa[x]
+    
+    # 合并x and y 所在的集合
+    def unionSet(self, x, y):
+        x = self.find(x)
+        y = self.find(y)
+        if x != y:	# 如果他两不是在同一个结合，合并两子集
+            self.fa[x] = y
+            
+class DisjoinSet:
+    def __init__(self, n):
+        self.fa = [i for i in range(n)]
+       
+    def find(self, x):
+        if x == self.fa[x]:
+            return x
+        self.fa[x] = self.find(self.fa[x])
+        return self.fa[x]
+    
+   	def unionSet(self, x, y):
+        x = self.find(x)
+        y = self.find(y)
+        if x != y:
+            self.fa[x] = y
+```
+
+
+
 
 
 
@@ -370,7 +410,7 @@ class Solution:
 
 Question:
 
-
+![image-20210811000003126](img/image-20210811000003126.png)
 
 Idea:
 
@@ -379,7 +419,39 @@ Idea:
 Python code:
 
 ```python
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        """
+            思路：并查集
+            这提问的就是有多少个不相邻的set, or disjointed set ==> 最快的方法就是并查集了
+            Time complexity: O(n^2)
+        """
+        # 城市初始化：一开始每个城市都是单独的root
+        self.fa = [i for i in range(len(isConnected))]
+        # 如果两者之间有联系，unionTwoSet
+        for i in range(len(isConnected)):
+            for j in range(i+1, len(isConnected)):
+                if isConnected[i][j] == 1:
+                    self.UnionSet(i, j)
+        # Finally, return number of set, where it's father is node itself
+        ans = 0
+        for i in range(len(self.fa)):
+            if self.fa[i] == i:
+                ans+=1
+        return ans
+    
+    def find(self, x):
+        # Base case: where father node is root node itself
+        if self.fa[x] == x:
+            return x
+        self.fa[x] = self.find(self.fa[x])  # 路径压缩
+        return self.fa[x]
 
+    def UnionSet(self, x, y):
+        x = self.find(x)
+        y = self.find(y)
+        if x != y:      # 记得要考虑the case where x and y are in same set 
+            self.fa[x] = y
 ```
 
 
@@ -394,15 +466,13 @@ Python code:
 | :----: | :------: | :--: | :----: |
 |   7    |    2     |  6   |   4    |
 
-
-
 | 华为 |
 | :--: |
 |  3   |
 
 Question:
 
-
+![image-20210811000030404](img/image-20210811000030404.png)
 
 Idea:
 
@@ -411,7 +481,69 @@ Idea:
 Python code:
 
 ```python
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        """
+            思路：并查集
+            我们的思路是把所有边界上的 OO 看做一个连通区域。遇到 OO 就执行并查集合并操作，这样所有的 OO 就会被分成两类
+                - 和边界上的 OO 在一个连通区域内的。这些 OO 我们保留。
+                - 不和边界上的 OO 在一个连通区域内的。这些 OO 就是被包围的，替换。
+            由于并查集我们一般用一维数组来记录，方便查找 parents，所以我们将二维坐标用 node 函数转化为一维坐标。
 
+            Step 1: 搭建并查集。每一个格子都是单独的, disjointed set ==> 除此之外要加一个特别的external set. 因为任何在board边上的“O”都不会填充为“X”，所以他们都可以当作是一伙的。因为每次碰到这种走格子题，肯定要用到dx, dy 走方向数组，因此可以假设外围又一圈"O", 边上的这些“O”都和外围的属于同一个disjointed set. ==> 所以需要 m*n + 1 个set.
+
+            Step 2: 每个格子遍历。就像dfs/bfs搜索一样，没碰到一个“O”，就把所有和它相邻的“O"画作同一个disjointed set --> 最后所有不和external "O" 在一组的都改成 "X" 就完了
+        """
+        self.dx = [1, 0, -1, 0]
+        self.dy = [0, -1, 0, 1]
+        m, n = len(board), len(board[0])
+        self.m, self.n = m, n
+        self.fa = [i for i in range(m*n+1)]
+        for i in range(m):
+            for j in range(n):
+                self.fa[self.encoder(i, j)] = self.encoder(i,j)
+        self.fa[m*n] =  -1  # 特殊定义，与外部边界相邻的“O”为一个特定子集 (不一定非得是-1，任何数都可以，只要不在1~m*n内)
+        print(self.fa)
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "O":
+                    for k in range(4):
+                        ni = self.dx[k] + i
+                        nj = self.dy[k] + j
+                        if ni < 0 or nj < 0 or ni >= m or nj >= n:  # 说明 board[i][j]为边界上的点, 那就直接把那个店的父亲节点标记为-1 （means external node)
+                            self.unionSet(self.encoder(i, j), self.encoder(m, n))
+                            # self.fa[self.find(self.encoder(i, j))] = self.find(m*n)
+                        elif board[ni][nj] == "O":    # 说明下一个点是和 board[i][j] 相邻的点，那就把他和board[ni][nj]放在同一个 set里    
+                            self.unionSet(self.encoder(i, j), self.encoder(ni, nj))
+        
+        # 最后, 所有不与外部边界相邻的“O”，都要标记为“X”
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "O" and self.find(self.encoder(i, j)) != self.find(m*n):
+                    board[i][j] = "X"
+
+    def unionSet(self, x, y):
+        x = self.find(x)
+        y = self.find(y)
+        if x != y:
+            self.fa[x] = y
+
+    # 2D数组 ==》 transform to 1D 数组 （这个很重要，你可以打印出来看，e.g., given a 2D array, matrix[2][2]; then it will become things like, nums[4] = [0, 1, 2, 3, 4]）
+    def encoder(self, i, j):
+        if i == self.m and j == self.n:
+            return self.m * self.n # for element m*n + 1
+        else:
+            return i * self.n + j
+    
+    def find(self, x):
+        if x == self.fa[x]:
+            return x
+        self.fa[x] = self.find(self.fa[x])
+        return self.fa[x]
 ```
 
 
