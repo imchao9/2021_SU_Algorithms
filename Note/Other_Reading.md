@@ -7,6 +7,7 @@
 - 课程事务
   - 期中成绩：https://shimo.im/sheets/NJkbEv6MLMIKZVqR/uNPds/
   - 期中重考链接，https://e.leetcode-cn.com/assessment/geekbang-0109
+  - 期中考试题及参考答案：https://shimo.im/docs/fpggRcECyz4DnTUK/ 
   - 算法作业收集表汇总， https://shimo.im/docs/5bqnr9KE7ghD7Wqy/read
   - 算法0期leetcode习题整理，https://shimo.im/docs/cP9RxQWRDGPpCcQR/read
   - 副本 算法训练营课程大纲，https://shimo.im/docs/GlgvDP18j68rhFWk

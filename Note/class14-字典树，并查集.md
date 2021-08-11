@@ -116,17 +116,46 @@ MakeSet(x): Create a new set containing element x.
 
 - 内部实现：
 
+![image-20210811124309435](img/image-20210811124309435.png)
+
+```python
+class DisjointSet:
+    def __init__(self, n):
+        self.fa = [i for i in range(n)]
+```
+
 
 
 UnionSet(x, y): Union of the sets containing x and y. 如果x and y 相交则无需合并。 
 
 - 内部实现：
 
+![image-20210811124318514](img/image-20210811124318514.png)
+
+```python
+    # 合并x and y 所在的集合
+    def unionSet(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x != root_y:	# 如果他两不是在同一个结合，合并两子集
+            self.fa[root_x] = root_y
+```
+
 
 
 Find(x): Return a reference to a representative element of the set containing x。找到x元素所在的集合代表。该操作也可以用于判断两个元素是否位于同一个集合，只要将它们各自的代表比较一下就可以了。 
 
 - 内部实现：
+
+![image-20210811124330372](img/image-20210811124330372.png)
+
+```python
+def find(self, x):
+        if x == self.fa[x]:	# 只有root‘s fa 指向他自己
+            return x
+        self.fa[x] = self.find(self.fa[x])	# 递归回来的结果就是root，回溯时赋值root到每个经过的节点，实现路径压缩
+        return self.fa[x]
+```
 
 
 
@@ -138,7 +167,7 @@ Find(x): Return a reference to a representative element of the set containing x�
 
 ![image-20210810180513352](img/image-20210810180513352.png)
 
-
+Note: **只要加了路径压缩这一步，那么并查集的这些操作, e.g., find(x), unionSet(x, y) 都是O(1)**
 
 ## 内部实现
 
@@ -194,9 +223,9 @@ class DisjoinSet:
 
 # 实战例题
 
-### 第 14 课
+## 第 14 课 字典树（Trie）
 
-#### 字典树（Trie）
+### [实现 Trie (前缀树) ](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)（Medium）
 
 - [实现 Trie (前缀树) ](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)（Medium）半年内出题频次：
 
@@ -292,7 +321,7 @@ class Trie:
 
 
 
-
+### [单词搜索 II ](https://leetcode-cn.com/problems/word-search-ii/)（Hard）
 
 - [单词搜索 II ](https://leetcode-cn.com/problems/word-search-ii/)（Hard）半年内出题频次：
 
@@ -400,7 +429,9 @@ class Solution:
 
 
 
-#### 并查集
+## 第14课 并查集
+
+### [省份数量](https://leetcode-cn.com/problems/number-of-provinces/)（Medium）
 
 - [省份数量](https://leetcode-cn.com/problems/number-of-provinces/)（Medium）半年内出题频次：
 
@@ -458,7 +489,7 @@ class Solution:
 
 
 
-
+### [被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)（Medium）
 
 - [被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)（Medium）半年内出题频次：
 
@@ -548,5 +579,52 @@ class Solution:
 
 
 
+### ACWing: 145. 超市
 
+Question:
+
+![image-20210811123640654](img/image-20210811123640654.png)
+
+Idea:
+
+![image-20210811123621469](img/image-20210811123621469.png)
+
+C++ Code:
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+// profit, day
+pair<int,int> a[10000];
+int fa[10001];
+int n;
+
+int find(int x) {
+    if (x == fa[x]) return x;
+    return fa[x] = find(fa[x]);
+}
+
+int main() {
+    while (cin >> n) {
+        for (int i = 0; i < n; i++)
+            cin >> a[i].first >> a[i].second;
+        sort(a, a + n);
+        for (int i = 0; i <= 10000; i++) fa[i] = i;
+        
+        int ans = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            int profit = a[i].first;
+            int day = a[i].second;
+            int lastAvailableDay = find(day);
+            if (lastAvailableDay > 0) {
+                ans += profit;
+                fa[lastAvailableDay] = lastAvailableDay - 1;
+            }
+        }
+        cout << ans << endl;
+    }
+}
+```
 
