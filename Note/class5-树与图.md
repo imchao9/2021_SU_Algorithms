@@ -113,12 +113,18 @@ struct TreeNode{
 ![image-20210710110206775](img/image-20210710110206775.png)
 
 1. 邻接矩阵`[i, j]`，空间复杂度`o(n^2)`
-
 2. 出边数组`vector<vector>`，空间复杂度`o(点数+边数)`
-
 3. 邻接表(知道就行了,一般不会用)
 
-   Note: 出边数组和邻接表理念上是一样的, 就像OS里学的multi-index table 一样, 出边数组的每一个点points to another list, and 邻接表上的每一个点points to a linked list. 在添加新的node时,因为order doesn’t matter, so you can append to the end, or insert in front, whatever is convenient for the underlying data structure.
+邻接表和出变数组差不多的，但也有些微笑
+
+- insert：如果是在第一个位置加，那两个种方式都很快，都是O(1), 但如果在最后insert，邻接表就需要遍历到linked list的尾部，所以是O(n)
+- delete: same as insert
+- look_up: 出边数组是O(1)， and 邻接表是O(n)
+
+总的来说出边数组就是用以个数组来记录每一个节点的children Node, and邻接表用的就是一个linked list. 但总的来说，出边数组操作速度会更快，所以一般首选出边数组。
+
+Note: 出边数组和邻接表理念上是一样的, 就像OS里学的multi-index table 一样, 出边数组的每一个点points to another list, and 邻接表上的每一个点points to a linked list. 在添加新的node时,因为order doesn’t matter, so you can append to the end, or insert in front, whatever is convenient for the underlying data structure.
 
 ## 要注意的几个问题:
 

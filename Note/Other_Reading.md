@@ -16,7 +16,9 @@
 - C++ API:
   - cppreference.com, https://zh.cppreference.com/w/cpp/string/basic_string/insert
 - Python API
+  - Python语言特性， https://github.com/taizilongxu/interview_python
 - Java API:
+  - Java Syntax Notes， https://drive.google.com/file/d/1ao4ZA28zzBttDkuS6MLQI52gDs_CJZEm/view
 - Other Language:
   - go语言技术栈方面的面试题、视频推荐, 面试题链接: https://pan.baidu.com/s/1uHpXHgBRYJcB2MOJ1m3N7w 提取码: v48k 复制这段内容后打开百度网盘手机App，操作更方便哦
     毛大面试经验分享公开课链接：https://pan.baidu.com/s/1d4Ti_bbbaYBnd3z0JVDuzw 
@@ -28,7 +30,8 @@
 - 按题目类别：
   - 二分查找算法， https://ojeveryday.github.io/AlgoWiki/#/BinarySearch/01-introduction
   - 并查集， https://ojeveryday.github.io/AlgoWiki/#/UnionFind/01-introduction
-  - 
+  - LeetCode-Solutions-in-Good-Style， https://github.com/liweiwei1419/LeetCode-Solutions-in-Good-Style
+  - Daily Coding Problem，https://github.com/liweiwei1419/LeetCode-Solutions-in-Good-Style
 - 大神的blog
   - [负雪明烛](https://blog.csdn.net/fuxuemingzhu)：5 年在 CSDN 上更新了 800多道题解，收获 160万 阅读。在中文力扣日更题解。
   - [李威威](https://liweiwei1419.gitee.io/leetcode-algo/)：中文力扣的大 V，对力扣题目掌握很全面，写得题解非常详细，对题目举一反三。

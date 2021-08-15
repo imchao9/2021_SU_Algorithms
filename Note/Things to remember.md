@@ -215,6 +215,26 @@ t = [ [0]*3 for i in range(3)]
 
 Reference, [How to initialize a two-dimensional array in Python?](https://stackoverflow.com/questions/2397141/how-to-initialize-a-two-dimensional-array-in-python)
 
+
+
+- Class or Static Variables in Python
+
+> There is no different between class or static variable in python
+>
+> ```python
+> # Python program to show that the variables with a value
+> # assigned in class declaration, are class variables
+> class` `CSStudent:
+>   ``stream ``=` `'cse'`         `# Class Variable
+>   ``def` `__init__(``self``,name,roll):
+>     ``self``.name ``=` `name      ``# Instance Variable
+>     ``self``.roll ``=` `roll      ``# Instance Variable
+> ```
+
+Reference, https://www.geeksforgeeks.org/g-fact-34-class-or-static-variables-in-python/
+
+
+
 ### Python Data Structure
 
 - Set
