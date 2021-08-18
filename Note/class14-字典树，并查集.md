@@ -150,8 +150,9 @@ Find(x): Return a reference to a representative element of the set containing x�
 ![image-20210811124330372](img/image-20210811124330372.png)
 
 ```python
+# Find the representative element of the set containing x
 def find(self, x):
-        if x == self.fa[x]:	# 只有root‘s fa 指向他自己
+        if x == self.fa[x]:	# 找到了，直接返回
             return x
         self.fa[x] = self.find(self.fa[x])	# 递归回来的结果就是root，回溯时赋值root到每个经过的节点，实现路径压缩
         return self.fa[x]
@@ -464,7 +465,8 @@ class Solution:
             for j in range(i+1, len(isConnected)):
                 if isConnected[i][j] == 1:
                     self.UnionSet(i, j)
-        # Finally, return number of set, where it's father is node itself
+                    
+        # Finally, return number of set, where it's father is node itself。 因为一开始都是 fa[i] = i, 到最后都没变的，就是一个独立的set
         ans = 0
         for i in range(len(self.fa)):
             if self.fa[i] == i:

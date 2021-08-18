@@ -1,8 +1,42 @@
+---
+layout: post  # Required
+title: 'Getting started with NVIDIA AI Jetbot Project' # Required
+date: 2021-08-15  # Required
+categories: [Hacking Skills, Starter] # Option
+tags: []  # Option
+permalink: getting_start_everything.html
+toc: false # Option
+excerpt: >- # Option
+  Getting start something new can be uncomfortable and even timidating sometime. So for reducing the anxious and easing the stress, I provide some guildance here that I feel useful when I started picking up those Hacking Techs in the school.
+---
+
+
+
+[TOC]
+
+
+
+# Introduction:
+
+I was first inspired by the Jetson Nano Developer kit that Nvidia has released on March 18th, 2019 (Check out this post, [NVIDIA Announces Jetson Nano: $99 Tiny, Yet Mighty NVIDIA CUDA-X AI Computer That Runs All AI Models](https://nvidianews.nvidia.com/news/nvidia-announces-jetson-nano-99-tiny-yet-mighty-nvidia-cuda-x-ai-computer-that-runs-all-ai-models)). As there are more and more supporting resource published (There are many and many [Jetson AI project](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#next) had been created since then, such as [JetBot](https://jetbot.org/master/), [JetRacer](https://github.com/NVIDIA-AI-IOT/jetracer). Check out this link to read more, [link](https://developer.nvidia.com/embedded/community/jetson-projects#jetracer)). I also started to get more interested and thinking to build one for myself as a hobby. 
+
+![Jetson_product_tiles_Devkit_pages-Jetson_Nano_2GB](2021-05-26-AI-Jetbot/Jetson_product_tiles_Devkit_pages-Jetson_Nano_2GB.jpg)
+
+
+
+
+
+
+
+
+
+Without further ado, let’s start the journey. The following article is everything you need to begin from nothing to fully running JetBot. 
+
+
+
 # Getting Started With NVIDIA Jetson Nano Developer Kit
 
-by Gilbert Tanner on Jun 15, 2020 · 9 min read
 
-![Getting Started With NVIDIA Jetson Nano Developer Kit](https://cms.gilberttanner.com/content/images/size/w1000/2020/08/thumbnail-1.jpeg)
 
 The NVIDIA Jetson Nano Developer Kit is a small edge computer for AI development.
 
@@ -16,35 +50,126 @@ In this article, you'll learn how to get started with the Jetson Nano, including
 - Compiling and installing Jetson Inference
 - Running the Jetson Inference demos
 
-## Overview
+# Hardware
 
-![ Jetson Nano Interfaces](https://cms.gilberttanner.com/content/images/size/w1000/2020/08/developer_kit_interfaces.PNG)Figure 1: Jetson Nano Interfaces
+First step, You need to obtain the hardware. If you really want to built one for yourself, you can check out this website, for the [Bill of Materials](https://jetbot.org/master/bill_of_materials.html).  However, if you are someone like me, only want to focus on the software component and building some intelligent robot, then you can purchase from [Theird Party Kit](https://jetbot.org/master/third_party_kits.html) (For me, I purchased from [YahBoom](http://www.yahboom.net/study/JETBOT) at Amazon). 
 
-The Jetson Nano Developer Kit packs a Quad-core ARM A57 CPU with a clock rate of 1.43GHz and 4GB of low-power DDR4 memory. For the connectors, it has 4x USB 3.0, 1xUSB2.0 Micro-B for powering with 5V, a HDMI and Display Port connector for connecting displays as well as one or two camera connectors that allow you to connect a Raspberry Pi Camera.
+If you also purchased from [YahBoom](http://www.yahboom.net/study/JETBOT), you can use their website for all the hardware assembling, and they also provided some deep learning module, such as Face recognition, object detection, mobile tracking and more. (But, I figured out, all those code are actually already provided by NVIDIA Jetson Hello World Project, here is their [Github repo](https://github.com/dusty-nv/jetson-inference))
 
-| GPU           | 128-core Maxwell                                             |
-| :------------ | ------------------------------------------------------------ |
-| CPU           | Quad-core ARM A57 @ 1.43 GHz                                 |
-| MEMORY        | 4 GB 64-bit LPDDR4 25.6 GB/s                                 |
-| STORAGE       | microSD (not included)                                       |
-| VIDEO ENCODER | 4K @ 30 \| 4x 1080p @ 30 \| 9x 720p @ 30 (H.264/H.265)       |
-| VIDEO DECODER | 4K @ 60 \| 2x 4K @ 30 \| 8x 1080p @ 30 \| 18x 720p @ 30 (H.264/H.265) |
-| CAMERA        | 2x MIPI CSI-2 DPHY lanes                                     |
-| CONNECTIVITY  | Gigabit Ethernet, M.2 Key E                                  |
-| DISPLAY       | HDMI and display port                                        |
-| USB           | 4x USB 3.0, USB 2.0 Micro-B                                  |
-| OTHERS        | GPIO, I2C, I2S, SPI, UART                                    |
-| MECHANICAL    | 69 mm x 45 mm, 260-pin edge connector                        |
+![JETSON NANO ROBOT](2021-05-26-AI-Jetbot/16cf92f7-04d3-416b-9283-419fc8b87eae.__CR0,0,970,600_PT0_SX970_V1___.jpg)
 
-For further information and a comparison between the different Jetson devices, you can visit the [Jetson Hardware section](https://developer.nvidia.com/embedded/develop/hardware).
+## Comparison of Jetson Nano: A02 vs B01 2GB vs B01 4GB
 
-## Requirements
+### B01: 2GB vs 4GB
+
+![2gb Vs 4gb Differences](2021-05-26-AI-Jetbot/2GB-vs-4GB-differences.jpg)
+
+Table of comparisons between Nvidia Jetson Nano Developer Kit 2GB and 4GB(B01).
+
+#### Hardware Changes from 4GB(B01) to 2GB
+
+1. Removed camera slot (J49)
+
+![img](2021-05-26-AI-Jetbot/Removed-Camera-Slot-J49.jpg)
+
+2. Changed DC barrel jack to USB Type-C port
+
+![img](2021-05-26-AI-Jetbot/Changed-DC-barrel-jack-to-USB-Type-C-port.jpg)
+
+3. Changed the USB Type-A ports
+
+![img](2021-05-26-AI-Jetbot/Changed-the-USB-Type-A-ports.jpg)
+
+![img](2021-05-26-AI-Jetbot/Changed-the-USB-Type-A-ports-Magnified.jpg)
+
+4. Removed Display Port
+
+![img](2021-05-26-AI-Jetbot/Removed-display-port.jpg)
+
+![img](2021-05-26-AI-Jetbot/Removed-display-port-Magnified.jpg)
+
+5. Removed PoE – Power over Ethernet port (J38)
+
+![img](2021-05-26-AI-Jetbot/Removed-PoE-Power-over-Ethernet-port-J38.jpg)
+
+6. Removed M.2 Key E slot (J18)
+
+![img](2021-05-26-AI-Jetbot/Removed-M.2-Key-E-slot-J18.jpg)
+
+#### **Compatibility Issues 2GB vs 4GB**
+
+1. You cannot use the [JetPack 4.4 image](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#write) in the Jetson Nano 2GB. You can only use the provided Ubuntu 18.04 in LXDE desktop environment with Openbox window manager given in [Nvidia’s Getting Started with Jetson Nano 2GB Developer Kit Website](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro).
+
+
+
+### A02 vs B01
+
+![Table of differences between Nvidia Jetson Nano Developer Kit A02 and B01](2021-05-26-AI-Jetbot/Differences-table.jpg)
+
+Table of comparisons between Nvidia Jetson Nano Developer Kit A02 and B01.
+
+
+
+
+
+![img](2021-05-26-AI-Jetbot/nvidia-jetson-nano-a02-pinout.jpg)
+
+![img](2021-05-26-AI-Jetbot/nvidia-jetson-nano-b01-pinout-1.png)
+
+Figure 2: Jetson Nano A02 Pinout (left), Jetson Nano B01 Pinout (right)
+
+
+
+### Hardware Changes from A02 to B01
+
+1. Removed Serial Port Header (J44)
+
+![Removed Serial Port Header J44](https://i0.wp.com/tutorial.cytron.io/wp-content/uploads/2020/10/Removed-Serial-Port-Header-J44.jpg?w=650&ssl=1)
+
+![Removed Serial Port Header J44 Magnified](2021-05-26-AI-Jetbot/Removed-Serial-Port-Header-J44-Magnified.jpg)
+
+2. Changed the button header (J40) under the module
+
+![Changed The Button Header J40 Under The Module](2021-05-26-AI-Jetbot/Changed-the-button-header-J40-under-the-module.jpg)
+
+![Changed The Button Header J40 Under The Module Magnified](2021-05-26-AI-Jetbot/Screenshot-2020-10-14-164657.jpg)
+
+3. Changed the position of Power Select Header (J48)
+
+![Changed The Position Of Power Select Header J48](2021-05-26-AI-Jetbot/Changed-the-position-of-Power-Select-Header-J48.jpg)
+
+![Changed The Position Of Power Select Header J48 Magnified](2021-05-26-AI-Jetbot/Changed-the-position-of-Power-Select-Header-J48-Magnified.jpg)
+
+4. Added a camera slot (J13)
+
+![Added A Camera Slot J13](2021-05-26-AI-Jetbot/Added-a-camera-slot-J13.jpg)
+
+![Added A Camera Slot J13 Magnified](2021-05-26-AI-Jetbot/Added-a-camera-slot-J13-Magnified.jpg)
+
+
+
+#### **Compatibility Issues A02 vs B01**
+
+1. The hardware of Jetson Nano Developer Kit A02 cannot boot with Intel 8260 WiFi plugged in. This issue is fixed in the newer B01 version of the hardware. Refer to [release notes](https://developer.nvidia.com/tegra-linux-driver-package-release-notes-r3222-ga).
+2. B0x images will work on A02 boards without issue. There are some pinmux differences between the two hardware revisions, but the B0x pinmux settings will work fine on an A02 board. However, A0x pinmux (dtb) does not work on B0x board.
+
+The CoM modules and carrier boards of the older (A02) and newer models (B01) are **not interchangeable**. That means you can not plug the A02 CoM module into the B01 carrier board, and vice versa. You need to upgrade the whole developer kit for an update.
+
+
+
+
+
+## Other Equipment
 
 Besides the Jetson Nano Developer Kit you'll also need **a microSD card**, a power Supply (5V 2A), and an **ethernet cable or WiFi adapter**.
 
 ### microSD card
 
-The Jetson Nano uses a microSD card as a boot device and primary storage. The minimum size for the microSD card is 16GB, but I would strongly recommend getting at least 32GB. It's also essential to get a fast microSD as this will make working on the Jetson Nano a lot more fluent.
+![image-20210815224237084](2021-05-26-AI-Jetbot/image-20210815224237084.png)
+
+The Jetson Nano uses a microSD card as a boot device and primary storage. The minimum size for the microSD card is 16GB, but I would strongly recommend getting at least 32GB, or 64GB. It's also essential to get a fast microSD as this will make working on the Jetson Nano a lot more fluent. 
+
+There are many different standard for microSD card – If you want to read more, check out these two article:  [A Guide to Speed Classes for SD and microSD Cards](https://www.kingston.com/unitedstates/us/solutions/personal-storage/memory-card-speed-classes), and [Fastest SD Card Speed Tests](https://havecamerawilltravel.com/photographer/fastest-sd-cards/). For this project, you can get this one, [SanDisk 64GB Extreme microSDXC UHS-I Memory Card with Adapter - Up to 160MB/s, C10, U3, V30, 4K, A2, Micro SD](https://www.amazon.com/gp/product/B07FCMBLV6/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1). 
 
 ### Power Supply
 
@@ -56,17 +181,36 @@ If you want to get the full performance out of the Jetson Nano, I'd recommend us
 
 Before connecting the Barrel Jack, you need to place a jumper on J48. The power jumper location can vary depending on if you have the [older A02 model or the newer B01 model](https://www.arducam.com/nvidia-jetson-nano-b01-update-dual-camera/).
 
-![img](https://cms.gilberttanner.com/content/images/size/w1000/2021/04/nvidia-jetson-nano-a02-pinout.jpg)
+### Camera:
 
-![img](https://cms.gilberttanner.com/content/images/size/w1000/2021/04/nvidia-jetson-nano-b01-pinout-1.png)
+![image-20210815224549465](2021-05-26-AI-Jetbot/image-20210815224549465.png)
 
-Figure 2: Jetson Nano A02 Pinout (left), Jetson Nano B01 Pinout (right)
+Here is a list of camera that work for Jetson Nano, [list](https://elinux.org/Jetson_Nano#Cameras), but I will suggest two to purchase, 1) [Raspberry Pi Camera Module v2](https://www.raspberrypi.org/products/camera-module-v2/), 2) [IMX219-160 8-Megapixels Camera Module 3280 × 2464 Resolution](https://www.amazon.com/Jetson-Nano-Camera-IMX219-160-8-Megapixels/dp/B07T43K7LC). If you lighting as well get this one, [IMX219-77IR 8-Megapixels Infrared Night Vision IR Camera Module 3280 × 2464 Resolution with IMX219 Sensor](https://www.amazon.com/Jetson-Nano-Camera-IMX219-77IR-8-Megapixels/dp/B07TT9Q4YL/ref=sr_1_2_sspa?dchild=1&keywords=jetson+nano+IR+camera&qid=1629082263&sr=8-2-spons&psc=1&smid=A2SA28G0M1VPHD&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzVDNIWUFIWjU5UVBaJmVuY3J5cHRlZElkPUEwMDUxNjE5MkVGTjhUOEhJVzJYUyZlbmNyeXB0ZWRBZElkPUEwMjcxMzk2MTBKVjhNWUxMWU5HJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==)
+
+Note: If you don’t get the camera right, you might get into some troble when running their Deep Learning code, check this article first, [Camera Streaming and Multimedia](https://github.com/dusty-nv/jetson-inference/blob/master/docs/aux-streaming.md#mipi-csi-cameras)
+
+### Fan
+
+Get this, [Noctua NF-A4x10 5V, Premium Quiet Fan, 3-Pin, 5V Version](https://www.amazon.com/Noctua-Cooling-Bearing-NF-A4X10-FLX-5V/dp/B00NEMGCIA?ref_=ast_slp_dp&th=1&psc=1), if you don’t have one
+
+![img](2021-05-26-AI-Jetbot/81uQzxhzsdL._AC_SX480_SY360_.jpg)
 
 ### Ethernet cable or WiFi Adapter
 
-Lastly, you'll need an ethernet cable or a WiFi Adapter since the Jetson Nano doesn't come with one.  For the WiFi Adapter, you can either use one that connects through USB, or you can use a PCIe WiFi Card like the [Intel® Dual Band Wireless-AC 8265](https://www.intel.com/content/www/us/en/products/wireless/wireless-products/dual-band-wireless-ac-8265.html).
+Lastly, you'll need an ethernet cable or a WiFi Adapter since the Jetson Nano doesn't come with one.  For the WiFi Adapter, you can either use one that connects through USB, or you can use a PCIe WiFi Card like the [Intel® Dual Band Wireless-AC 8265](https://www.intel.com/content/www/us/en/products/wireless/wireless-products/dual-band-wireless-ac-8265.html). 
+
+For me, I have this one, [Wireless-AC8265 Dual Mode Intel AC8265 Wireless NIC Module for Jetson Nano Developer Kit B01/A02, Support 2.4GHz/5GHz 300Mbps/867Mbps Dual Band WiFi and Bluetooth 4.2](https://www.amazon.com/dp/B07V9B5C6M/ref=sspa_dk_detail_9?psc=1&pd_rd_i=B07V9B5C6M&pd_rd_w=msL8R&pf_rd_p=887084a2-5c34-4113-a4f8-b7947847c308&pd_rd_wg=KLBmG&pf_rd_r=T7DNQPVT44YR60JTGK10&pd_rd_r=c00dd53c-b60b-4b7d-ae40-f60e02b57dfd&smid=A3B0XDFTVR980O&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzVjdUVlFVOTVaVlROJmVuY3J5cHRlZElkPUEwMDU0MDk3M1BRRk5DNTA3TEZYUyZlbmNyeXB0ZWRBZElkPUExMDM4NDE4MkZQM09YOTJIQ0hYMiZ3aWRnZXROYW1lPXNwX2RldGFpbCZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU=)
+
+### **Reference:** 
+
+- Jetson Nano B01 vs A02: What’s New for the Compute on Module (CoM) and Carrier Board, https://www.arducam.com/nvidia-jetson-nano-b01-update-dual-camera/
+- Nvidia Jetson Nano Developer Kit A02 vs B01 vs 2GB, https://tutorial.cytron.io/2020/10/14/nvidia-jetson-nano-developer-kit-a02-vs-b01-vs-2gb/
 
 ## Setup
+
+Note: you need to download some software for this [balenaEtcher](https://www.balena.io/etcher/) – For Flash OS image, and [SD Card Formatter](https://www.sdcard.org/downloads/formatter/) – For formating SD Memory Card. Also, instead of using the following SD Card Image provided by Nvida, use this one with Deep learning module integrated ( [Yahboom_jetbot_64GB](https://drive.google.com/drive/folders/1bEY7TtjdmsftUsVksEg8w02F5NnwSnOy), and [32GB](https://drive.google.com/drive/folders/1N7msGC-kr0gMUwPphmaRsUaLdYtkzDEW)). 
+
+==> the following article can be outdated
 
 Before we can get started setting up a Python environment and running some deep learning demos, we have to download the [Jetson Nano Developer Kit SD Card Image](https://developer.nvidia.com/jetson-nano-sd-card-image) and [flash it to the microSD card](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#write).
 
@@ -85,9 +229,11 @@ When you boot the system for the first time, you'll be taken through some initia
 
 After the initial setup, you should see the following screen:
 
-![Jetson Nano Desktop](https://cms.gilberttanner.com/content/images/size/w1000/2020/08/initial_screen.png)Figure 4: Desktop
+![Jetson Nano Desktop](2021-05-26-AI-Jetbot/initial_screen.png)
 
-## Increasing swap memory
+Figure 4: Desktop
+
+### Increasing swap memory
 
 Recent releases of JetPack enable swap memory as part of the default distribution using the [zram module](https://en.wikipedia.org/wiki/Zram). By default, 2GB of swap memory is enabled. To change the amount of swap memory, you can either edit the /etc/systemd/nvzramconfig.sh file directly, or you can use the [resizeSwapMemory repository](https://github.com/JetsonHacksNano/resizeSwapMemory) from [JetsonNanoHacks](https://www.jetsonhacks.com/2019/11/28/jetson-nano-even-more-swap/).
 
@@ -99,7 +245,7 @@ cd resizeSwapMemory
 
 After executing the above command, you'll have to restart the Jetson Nano for the changes to take effect.
 
-## Installing prerequisites and configuring your Python environment
+### Installing prerequisites and configuring your Python environment
 
 Now, that the Jetson Nano is ready to go we will go through creating a deep learning environment. We will start of by installing all prerequsites and configuring a Python environment as well as how to code remote using VSCode Remote SSH.
 
@@ -159,24 +305,28 @@ If you are like me and hate writing long scripts in nano or vim, the VSCode remo
 
 To use VSCode remote development, you'll first have to install the remote development plugin. After that, you need to create an SSH-Key on your local machine and then copy it over to the Jetson Nano.
 
+Note: Perform this on your local machine!!
+
 ```bash
 # Create Key
 ssh-keygen -t rsa
-# Copy key to jetson nano
+# Copy key to jetson nano 
 cat ~/.ssh/id_rsa.pub | ssh user@hostname 'cat >> .ssh/authorized_keys'
 ```
 
 Now you only need to add the SSH Host. Ctrl + Shift + P -> Remote SSH: Connect to Host.
 
-![img](https://cms.gilberttanner.com/content/images/size/w1000/2020/03/grafik-5.png)Figure 5: Added new host.
+![img](2021-05-26-AI-Jetbot/grafik-5.png)Figure 5: Added new host.
 
-![img](https://cms.gilberttanner.com/content/images/size/w1000/2020/08/vscode_remote_control.PNG)Figure 6: VSCode Remote Controll
+![img](2021-05-26-AI-Jetbot/vscode_remote_control.PNG)Figure 6: VSCode Remote Controll
 
 ## Installing deep learning libraries
 
 Now that we have our development and python environments set up, we can start installing some deep learning libraries. NVIDIA provides [a guide on how to install deep learning libraries on the Jetson Nano](https://elinux.org/Jetson_Zoo). I simply put the commands for some installations below.
 
 ### [TensorFlow](https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform/index.html)
+
+Note: TensorFlow 2.0 is problematic, check out this website, https://forums.developer.nvidia.com/t/tensorflow-2-0/72530, and search with “TensorFlow 2.0 can be installed with JetPack4.3 now.”, Also you might need to know the  version of your JetPack, so use command `jtop` to figure that out!
 
 ```bash
 # install prerequisites
@@ -205,6 +355,8 @@ $ sudo pip3 install keras
 ```
 
 ### [PyTorch](https://forums.developer.nvidia.com/t/pytorch-for-jetson-nano-version-1-5-0-now-available/72048)
+
+Note: Instead of running the following step, I will suggest you following this [instruction](https://github.com/dusty-nv/jetson-inference/blob/master/docs/building-repo-2.md), because they write a scipt for downing PyTorch and have the correct environment building up for you!
 
 ```bash
 # install OpenBLAS and OpenMPI
@@ -248,7 +400,7 @@ $ sudo pip install 'pillow<7' # always needed for Python 2.7, not needed torchvi
 
 Installing OpenCV on the Jetson Nano can be a bit more complicated, but frankly, [JetsonHacks.com](https://www.jetsonhacks.com/) has a [great guide](https://www.jetsonhacks.com/2019/11/22/opencv-4-cuda-on-jetson-nano/).
 
-## Compiling and installing Jetson Inference
+### Compiling and installing Jetson Inference
 
 NVIDIA's Jetson Inference repository includes lots of great scripts that allow you to perform image classification, object detection, and semantic segmentation on both images and a live video stream. In this article, we will go through how to compile and install the Jetson Inference repository and how to run some of the provided demos. Maybe I will go through the repository in more detail in an upcoming article.
 
@@ -291,7 +443,7 @@ $ ./imagenet-console --network=resnet-18 images/jellyfish.jpg output_jellyfish.j
 $ ./imagenet-console.py --network=resnet-18 images/jellyfish.jpg output_jellyfish.jpg
 ```
 
-![Image Classification Example](https://cms.gilberttanner.com/content/images/size/w1000/2020/08/imagenet_jellyfish.jpg)Figure 7: Image Classification Example
+![Image Classification Example](2021-05-26-AI-Jetbot/imagenet_jellyfish.jpg)Figure 7: Image Classification Example
 
 ### Object Detection
 
@@ -308,7 +460,7 @@ $ ./detectnet-console --network=ssd-mobilenet-v2 images/peds_0.jpg output.jpg   
 $ ./detectnet-console.py --network=ssd-mobilenet-v2 images/peds_0.jpg output.jpg  # --network flag is optional
 ```
 
-![Object Detection Example](https://cms.gilberttanner.com/content/images/size/w1000/2021/04/detectnet-ssd-peds-0.jpg)Figure 8: Object Detection Example
+![Object Detection Example](2021-05-26-AI-Jetbot/detectnet-ssd-peds-0.jpg)Figure 8: Object Detection Example
 
 ### Semantic Segmentation
 
@@ -325,7 +477,7 @@ $ ./segnet-console --network=fcn-resnet18-cityscapes images/city_0.jpg output.jp
 $ ./segnet-console.py --network=fcn-resnet18-cityscapes images/city_0.jpg output.jpg
 ```
 
-![Semantic Segmentation](https://cms.gilberttanner.com/content/images/size/w1000/2020/08/output_segmentation.jpg)Figure 9: Semantic Segmentation
+![Semantic Segmentation](2021-05-26-AI-Jetbot/output_segmentation.jpg)Figure 9: Semantic Segmentation
 
 ## JetPack 4.5.1 CUDA and VisionWorks samples
 
@@ -424,4 +576,170 @@ That's it from this article. In follow-up articles, I will go further into devel
 - Deploying custom models on the Jetson Nano
 - [NVIDIA Jetbot](https://github.com/NVIDIA-AI-IOT/jetbot)
 
-If you have any questions or just want to chat with me, feel free to leave a comment below or contact me on social media. If you want to get  continuous updates about my blog make sure to [join my newsletter](http://eepurl.com/gq-u4X)
+If you have any questions or just want to chat with me, feel free to leave a comment below or contact me on social media.
+
+
+
+
+
+## Reference:
+
+- Embedded Linux Wiki, Jetson/Performance, https://elinux.org/Jetson/Performance ==> (For how to control CPU performance)
+- Getting a Running Start with the NVIDIA Jetson Nano, https://www.farsightsecurity.com/blog/txt-record/nvidia-20200124/ ==> Software Intro
+- Getting Started with the NVIDIA Jetson Nano Developer Kit, https://dronebotworkshop.com/nvidia-jetson-developer-kit/
+- [Nvidia]Getting Started with Jetson Nano Developer Kit, https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#next
+- [Jetson Nano Wiki](https://elinux.org/Jetson_Nano) – A wiki for the NVIDIA Jetson Nano.
+
+
+
+- How to Establish Remote Desktop Access to Ubuntu From Windows, 
+
+
+
+# Appendix A: quick reference for Jetson Inference demo
+
+```sh
+# ===========================>  Using the ImageNet Program on Jetson
+cd jetson-inference/build/aarch64/bin
+./imagenet images/orange_0.jpg images/test/output_0.jpg     # (default network is googlenet)
+
+# Using anothher image
+./imagenet images/strawberry_0.jpg images/test/output_1.jpg
+# Using Different Classification Models
+./imagenet --network=resnet-18 images/jellyfish.jpg images/test/output_jellyfish.jpg
+
+# Processing a Video
+# Download test video (thanks to jell.yfish.us)
+wget https://nvidia.box.com/shared/static/tlswont1jnyu3ix2tbf7utaekpzcx4rc.mkv -O jellyfish.mkv
+# C++
+./imagenet --network=resnet-18 jellyfish.mkv images/test/jellyfish_resnet18.mkv
+
+# Running the Live Camera Recognition Demo
+# The imagenet.cpp / imagenet.py samples that we used previously can also be used for realtime camera streaming. The types of supported cameras include:
+# MIPI CSI cameras (csi://0)
+# V4L2 cameras (/dev/video0)
+# RTP/RTSP streams (rtsp://username:password@ip:port)
+# For more information about video streams and protocols, please see the Camera Streaming and Multimedia page, https://github.com/dusty-nv/jetson-inference/blob/master/docs/aux-streaming.md
+./imagenet csi://0                    # MIPI CSI camera
+./imagenet /dev/video0                # V4L2 camera
+./imagenet /dev/video0 output.mp4     # save to video file
+
+
+
+# ===========================>  Locating Objects with DetectNet: Detecting Objects from Images
+./detectnet --network=ssd-mobilenet-v2 images/peds_0.jpg images/test/output.jpg     # --network flag is optional
+./detectnet images/peds_1.jpg images/test/output.jpg
+# Python
+./detectnet.py --network=ssd-mobilenet-v2 images/peds_0.jpg images/test/output.jpg  # --network flag is optional
+./detectnet.py images/peds_1.jpg images/test/output.jpg
+
+# Processing a Directory or Sequence of Images: If you have multiple images that you'd like to process at one time, you can launch the detectnet program with the path to a directory that contains images or a wildcard sequence:
+./detectnet "images/peds_*.jpg" images/test/peds_output_%i.jpg
+
+# Processing Video Files: You can also process videos from disk. There are some test videos found on your Jetson under /usr/share/visionworks/sources/data
+./detectnet /usr/share/visionworks/sources/data/pedestrians.mp4 images/test/pedestrians_ssd.mp4
+./detectnet /usr/share/visionworks/sources/data/parking.avi images/test/parking_ssd.avi
+
+# Running the Live Camera Detection Demo
+./detectnet csi://0                    # MIPI CSI camera
+./detectnet /dev/video0                # V4L2 camera
+./detectnet /dev/video0 output.mp4     # save to video file
+
+
+# ======================= Semantic Segmentation with SegNet
+./segnet --network=<model> input.jpg output.jpg                  # overlay segmentation on original
+./segnet --network=<model> --alpha=200 input.jpg output.jpg      # make the overlay less opaque
+./segnet --network=<model> --visualize=mask input.jpg output.jpg # output the solid segmentation mask
+# Cityscapes: Let's look at some different scenarios. Here's an example of segmenting an urban street scene with the Cityscapes model:
+./segnet --network=fcn-resnet18-cityscapes images/city_0.jpg images/test/output.jpg
+
+# DeepScene: The DeepScene dataset consists of off-road forest trails and vegetation, aiding in path-following for outdoor robots. Here's an example of generating the segmentation overlay and mask by specifying the --visualize argument:
+./segnet --network=fcn-resnet18-deepscene images/trail_0.jpg images/test/output_overlay.jpg                # overlay
+./segnet --network=fcn-resnet18-deepscene --visualize=mask images/trail_0.jpg images/test/output_mask.jpg  # mask
+
+# Multi-Human Parsing (MHP): Multi-Human Parsing provides dense labeling of body parts, like arms, legs, head, and different types of clothing. See the handful of test images named humans-*.jpg found under images/ for trying out the MHP model:
+./segnet --network=fcn-resnet18-mhp images/humans_0.jpg images/test/output.jpg
+
+# Pascal VOC: Pascal VOC is one of the original datasets used for semantic segmentation, containing various people, animals, vehicles, and household objects. There are some sample images included named object-*.jpg for testing out the Pascal VOC model:
+./segnet --network=fcn-resnet18-voc images/object_0.jpg images/test/output.jpg
+# SUN RGB-D: The SUN RGB-D dataset provides segmentation ground-truth for many indoor objects and scenes commonly found in office spaces and homes. See the images named room-*.jpg found under the images/ subdirectory for testing out the SUN models:
+./segnet --network=fcn-resnet18-sun images/room_0.jpg images/test/output.jpg
+# Processing a Directory or Sequence of Images: If you want to process a directory or sequence of images, you can launch the program with the path to the directory that contains images or a wildcard sequence:
+./segnet --network=fcn-resnet18-sun "images/room_*.jpg" images/test/room_output_%i.jpg
+
+# *** Running the Live Camera Segmentation Demo***
+./segnet --network=<model> csi://0                    # MIPI CSI camera
+./segnet --network=<model> /dev/video0                # V4L2 camera
+./segnet --network=<model> /dev/video0 output.mp4     # save to video file
+# Visualization: Displayed in the OpenGL window are the live camera stream overlayed with the segmentation output, alongside the solid segmentation mask for clarity. Here are some examples of it being used with different models that are available to try:
+./segnet --network=fcn-resnet18-mhp csi://0
+./segnet --network=fcn-resnet18-sun csi://0
+./segnet --network=fcn-resnet18-deepscene csi://0
+
+
+
+# ===========================>  Pose Estimation with PoseNet
+# Pose Estimation on Images
+./posenet "images/humans_*.jpg" images/test/pose_humans_%i.jpg
+
+# Pose Estimation from Video: To run pose estimation on a live camera stream or video, pass in a device or file path from the Camera Streaming and Multimedia page.
+./posenet /dev/video0     # csi://0 if using MIPI CSI camera
+./posenet --network=resnet18-hand /dev/video0
+
+# All available model
+# 1 "\ZbImage Recognition - all models  (2.2 GB)\Zn" off \
+# 2 "   > AlexNet                    (244 MB)" off \
+# 3 "   > GoogleNet                  (54 MB)" on \
+# 4 "   > GoogleNet-12               (42 MB)" off \
+# 5 "   > ResNet-18                  (47 MB)" on \
+# 6 "   > ResNet-50                  (102 MB)" off \
+# 7 "   > ResNet-101                 (179 MB)" off \
+# 8 "   > ResNet-152                 (242 MB)" off \
+# 9 "   > VGG-16                     (554 MB)" off \
+# 10 "   > VGG-19                     (575 MB)" off \
+# 11 "   > Inception-v4               (172 MB)" off \
+# 12 "\ZbObject Detection - all models   (395 MB)\Zn" off \
+# 13 "   > SSD-Mobilenet-v1           (27 MB)" off \
+# 14 "   > SSD-Mobilenet-v2           (68 MB)" on \
+# 15 "   > SSD-Inception-v2           (100 MB)" off \
+# 16 "   > PedNet                     (30 MB)" off \
+# 17 "   > MultiPed                   (30 MB)" off \
+# 18 "   > FaceNet                    (24 MB)" off \
+# 19 "   > DetectNet-COCO-Dog         (29 MB)" off \
+# 20 "   > DetectNet-COCO-Bottle      (29 MB)" off \
+# 21 "   > DetectNet-COCO-Chair       (29 MB)" off \
+# 22 "   > DetectNet-COCO-Airplane    (29 MB)" off \
+# 23 "\ZbMono Depth - all models         (146 MB)\Zn" off \
+# 24 "   > MonoDepth-FCN-Mobilenet    (5 MB)" on \
+# 25 "   > MonoDepth-FCN-ResNet18     (40 MB)" off \
+# 26 "   > MonoDepth-FCN-ResNet50     (100 MB)" off \
+# 27 "\ZbPose Estimation - all models    (222 MB)\Zn" off \
+# 28 "   > Pose-ResNet18-Body         (74 MB)" on \
+# 29 "   > Pose-ResNet18-Hand         (74 MB)" on \
+# 30 "   > Pose-DenseNet121-Body      (74 MB)" off \
+# 31 "\ZbSemantic Segmentation - all            (518 MB)\Zn" off \
+# 32 "   > FCN-ResNet18-Cityscapes-512x256   (47 MB)" on \
+# 33 "   > FCN-ResNet18-Cityscapes-1024x512  (47 MB)" on \
+# 34 "   > FCN-ResNet18-Cityscapes-2048x1024 (47 MB)" off \
+# 35 "   > FCN-ResNet18-DeepScene-576x320    (47 MB)" on \
+# 36 "   > FCN-ResNet18-DeepScene-864x480    (47 MB)" off \
+# 37 "   > FCN-ResNet18-MHP-512x320          (47 MB)" on \
+# 38 "   > FCN-ResNet18-MHP-640x360          (47 MB)" off \
+# 39 "   > FCN-ResNet18-Pascal-VOC-320x320   (47 MB)" on \
+# 40 "   > FCN-ResNet18-Pascal-VOC-512x320   (47 MB)" off \
+# 41 "   > FCN-ResNet18-SUN-RGBD-512x400     (47 MB)" on \
+# 42 "   > FCN-ResNet18-SUN-RGBD-640x512     (47 MB)" off \
+# 43 "\ZbSemantic Segmentation - legacy     (1.4 GB)\Zn" off \
+# 44 "   > FCN-Alexnet-Cityscapes-SD     (235 MB)" off \
+# 45 "   > FCN-Alexnet-Cityscapes-HD     (235 MB)" off \
+# 46 "   > FCN-Alexnet-Aerial-FPV        (7 MB)" off \
+# 47 "   > FCN-Alexnet-Pascal-VOC        (235 MB)" off \
+# 48 "   > FCN-Alexnet-Synthia-CVPR      (235 MB)" off \
+# 49 "   > FCN-Alexnet-Synthia-Summer-SD (235 MB)" off \
+# 50 "   > FCN-Alexnet-Synthia-Summer-HD (235 MB)" off \
+# 51 "\ZbImage Processing - all models   (138 MB)\Zn" off \
+# 52 "   > Deep-Homography-COCO       (137 MB)" off \
+# 53 "   > Super-Resolution-BSD500    (1 MB)" off )
+```
+
+ 

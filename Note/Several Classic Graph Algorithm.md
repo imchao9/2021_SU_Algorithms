@@ -31,7 +31,7 @@ MST Optimalism Proof
 
 ## Kruskal MST Algorithm
 
-**Kruskal MST Algorithm** – ==Always selected the minimum weighted edge amount all unvisited_set, that’s min(Edge<vi, vj>), that doesn’t form a cycle==
+**Kruskal MST Algorithm** – ==Always selected the minimum weighted edge amount all unvisited_set, that’s min(Edge<vi, vj>), <u>that doesn’t form a cycle</u>==
 
 
 
@@ -129,26 +129,100 @@ procedure PrimMST(G):
 
 ## Bellman–Ford Algorithm
 
-- Bellman-Ford is a type of DP algorithm, with O(VE) of time complexity 
-- Goal: Given a graph and a source vertex *src* in graph, find shortest paths from *src* to all vertices in the given graph.
-- Property:
-  - allow the graph contain negative weighted edge
-- Th
+Bellman-Ford is a type of DP algorithm, with O(VE) of time complexity 
+
+Goal: Given a graph and a source vertex *src* in graph, find shortest paths from *src* to all vertices in the given graph.
+
+**Property:**
+
+- <u>allow the graph contain **negative weighted edge**</u>(负环)
+
+- 什么是负环？ ==> The weight of a cycle is negative, e.g., 如下图，what is the shortest path for dist[A]? ==> 负无穷，why？因为最短的方式就是不停的绕圈，你没绕一次圈(A->B->C->D), dist[A] -= 1 ==》 这也是为什么Bellman-Ford可以用来检测负环的原因。当所有的edges, 都跑了V-1次，但最后再跑一次，你发现还有地方可以optimize，or relax, that means there is the negative cycle.
+
+![image-20210818002510739](../../../../Github_project(Drago1234)/My_Website/Drago1234.github.io/images/2021-08-16-pyhton-read-excel-content-and-send-automatic-email/image-20210818002510739.png)
+
+**Idea:**
+
+![image-20210818003046185](img/image-20210818003046185.png)
+
+![image-20210818003127090](img/image-20210818003127090.png)
 
 
 
+- 什么时候只需要一轮？(Extreme case)
+
+When you have 4 vertice, and 3 vertice all connect to same one.
+
+e..g, edges =[[1, 2], [1, 3], [1, 4] ], cost = [-2, -1, 3]
+
+==> No matter the order, you always only need one iteration to get the result
+
+- When we need n-1 iteration? (Extreme case)
+
+When all vertice are line up in a line, and the edge were given in reverse order. (Rare, and extreme case)
+
+e.g., edges = [ ([3, 4], 3), ([1, 2], 2), ([2, 3], -1)] 	# 一般你不知道edge 给的顺序， 所以这是可能发生的
+
+==> Draw the process yourself, and you will see that you need n-1 iteration to get the final result.
+
+ **具体实现**
+
+- use a dist[i] array to keep track the optimium distance from root to node i.
+- Initialize all node with value float(“inf”), except 0 for root node
+- Traversal all edges, for V-1 times. For each edge [x, y], if dist[x] + weight[x, y] < dist[y], then update dist[y] = dist[x] + weight[x, y]  # Because we found a better approach/path ==> Some textbook call this **Relaxation Step**
+  - That’s why the time complexity is O((V-1)*E)
+
+**实战例题：**
+
+- [网络延迟时间](https://leetcode-cn.com/problems/network-delay-time/)（Medium）半年内出题频次：
+
+Question:
+
+![image-20210818005611942](img/image-20210818005611942.png)
+
+Idea:
 
 
-Reference:
+
+C++ Code:
+
+![image-20210818005726659](img/image-20210818005726659.png)
+
+Python Code:
+
+```python
+
+```
+
+
+
+**Reference:**
 
 - Bellman–Ford Algorithm | DP-23, https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
 
 
 
-## Dijkstra’s shortest path algorithm
+## Dijkstra’s shortest path algorithm(迪杰斯特拉)
 
 - Dijkstra’s algorithm is a Greedy algorithm and time complexity is O(V+E LogV), where V is number of vertices, and E is the number of edges
-- Dijkstra doesn’t work for Graphs with negative weight edges
+
+Property:
+
+- Dijkstra doesn’t work for Graphs with negative weight edges (because it applys greedy algorithm)
+
+
+
+Idea:
+
+- use a dist[i] array to keep track the optimium distance from root to node i.
+- Initialize all node with value float(“inf”), except 0 for root node
+- Traversal through each Eage[x, y], if dist[x] + weight[x, y] < dist[y], then update dist[y] = dist[x] + weight[x, y]  # Because we found a better approach/path ==> Some textbook call this **Relaxation Step**
+
+
+
+
+
+
 
 
 
@@ -183,3 +257,7 @@ Reference:
   - **Kruskal MST Algorithm** – ==Always selected the minimum weighted edge amount all unvisited_set, that’s min(Edge<vi, vj>), that doesn’t form a cycle==
   - **Prim’s MST Algorithm:** ==Always selected the edge that has minimum weight between MST set and unvisited_set, that’s min( (U - G.V), U), where U is the unvisited_set and is initialized as (G.V - v1), and (U - G.V) is the MST that we need to construct.==
 - Shortesting path: 这个考虑的是任意一点到起点的最短距离， 所以必须要用DP的思路来实现
+
+
+
+Dijkstra is however generally considered better in the absence of negative weight edges, as a typical binary heap priority queue implementation has O((|E|+|V|)log|V|) time complexity [A Fibonacci heap priority queue gives O(|V|log|V| + |E|)], while the Bellman-Ford algorithm has O(|V||E|) complexity
