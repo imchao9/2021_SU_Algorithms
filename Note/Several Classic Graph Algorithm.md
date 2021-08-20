@@ -14,7 +14,7 @@ Imaging if we have a graph with 6 vertice and 7 edge amount then, then that woul
 
 ![image-20210813005238357](img/image-20210813005238357.png)
 
-==> this can be pretty cumbersom and time-comsuming ==> So, here are two algoirthm that can help use to find MST: 1) Kruskal algorithm, and 2) Prim’s Algorithm
+==> this can be pretty cumbersome and time-consuming ==> So, here are two algorithm that can help use to find MST: 1) Kruskal algorithm, and 2) Prim’s Algorithm
 
 (picture taken from this video, https://www.youtube.com/watch?v=4ZlRH0eK-qQ&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O&index=44)
 
@@ -129,9 +129,9 @@ procedure PrimMST(G):
 
 ## Bellman–Ford Algorithm
 
-Bellman-Ford is a type of DP algorithm, with O(VE) of time complexity 
+**Intro:** <u>Bellman-Ford is a type of DP algorithm, with O(VE) of time complexity</u> 
 
-Goal: Given a graph and a source vertex *src* in graph, find shortest paths from *src* to all vertices in the given graph.
+**Goal:** <u>Given a graph and a source vertex *src* in graph, find shortest paths from *src* to all vertices in the given graph.</u>
 
 **Property:**
 
@@ -142,6 +142,21 @@ Goal: Given a graph and a source vertex *src* in graph, find shortest paths from
 ![image-20210818002510739](../../../../Github_project(Drago1234)/My_Website/Drago1234.github.io/images/2021-08-16-pyhton-read-excel-content-and-send-automatic-email/image-20210818002510739.png)
 
 **Idea:**
+
+**Algorithm** 
+Following are the detailed steps.
+***Input:*** Graph and a source vertex *src* 
+***Output:*** Shortest distance to all vertices from *src*. If there is a negative weight cycle, then shortest distances are not calculated, negative weight cycle is reported.
+**1)** This step initializes distances from the source to all vertices as infinite and distance to the source itself as 0; ==> Create an array dist[] of size |V| with all values as infinite except dist[src] where src is source vertex.
+**2)** This step calculates shortest distances. Do following |V|-1 times where |V| is the number of vertices in given graph. 
+…..**a)** Do following **for each edge u-v** 
+………………If dist[v] > dist[u] + weight of edge uv, then update dist[v] 
+………………….dist[v] = dist[u] + weight of edge uv
+**3)** This step reports if there is a negative weight cycle in graph. Do following for each edge u-v 
+……If dist[v] > dist[u] + weight of edge uv, then “Graph contains negative weight cycle” 
+The idea of step 3 is, step 2 guarantees the shortest distances if the graph doesn’t contain a negative weight cycle. If we iterate through all edges one more time and get a shorter path for any vertex, then there is a negative weight cycle
+
+***How does this work?*** Like other Dynamic Programming Problems, the algorithm calculates shortest paths in a bottom-up manner. It first calculates the shortest distances which have at-most one edge in the path. Then, it calculates the shortest paths with at-most 2 edges, and so on. After the i-th iteration of the outer loop, the shortest paths with at most i edges are calculated. There can be maximum |V| – 1 edges in any simple path, that is why the outer loop runs |v| – 1 times. The idea is, assuming that there is no negative weight cycle, if we have calculated shortest paths with at most i edges, then an iteration over all edges guarantees to give shortest path with at-most (i+1) edges (Proof is simple, you can refer [this](http://courses.csail.mit.edu/6.006/spring11/lectures/lec15.pdf) or [MIT Video Lecture](http://www.youtube.com/watch?v=Ttezuzs39nk))
 
 ![image-20210818003046185](img/image-20210818003046185.png)
 
@@ -178,7 +193,7 @@ e.g., edges = [ ([3, 4], 3), ([1, 2], 2), ([2, 3], -1)] 	# 一般你不知道edg
 
 Question:
 
-![image-20210818005611942](img/image-20210818005611942.png)
+![image-20210818164044189](img/image-20210818164044189.png)
 
 Idea:
 
@@ -191,7 +206,41 @@ C++ Code:
 Python Code:
 
 ```python
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        """
+            方法一：Bellman-ford
+            这道题要找的就是，从root到最远那个点所需要的时间。==》                       
+        """
+        # Initialize the cost of all node as float('inf'), except for root as 0
+        dist = [2**31 for i in range(n+1)]    # Note: start from 1, not 0 (check the range of k and n)
+        # In here, why we should use 2^31 instead of float('inf')? ==> because we want to avoid stack overflow(for operation, dist[u] + w). Note:  The signed version goes from -2^31-1 to 2^31, which is –2,147,483,648 to 2,147,483,647 or about -2 billion to +2 billion
+        dist[k] = 0
 
+        # Bellman-ford algo
+        for i in range(n-1):
+            flag = False
+            for edge in times:
+                u = edge[0]
+                v = edge[1]
+                w = edge[2]
+                # Relaxation Step
+                if dist[u] + w < dist[v]:
+                    dist[v] = dist[u] + w
+                    flag = True
+
+            # If no more update happen, we can exit the loop
+            if flag == False:
+                break
+        
+        # Find the ans: Check the time cost for each node, and save the max as final result
+        ans = 0
+        for i in range(1, n+1):
+            ans = max(ans, dist[i])
+        # For the case that there is a negative circle
+        if ans == 2**31:
+            ans = -1
+        return ans
 ```
 
 
@@ -199,55 +248,224 @@ Python Code:
 **Reference:**
 
 - Bellman–Ford Algorithm | DP-23, https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/
+- [Bellman-Ford vs Dijkstra: Under what circumstances is Bellman-Ford better?](https://stackoverflow.com/questions/19482317/bellman-ford-vs-dijkstra-under-what-circumstances-is-bellman-ford-better)
 
 
 
 ## Dijkstra’s shortest path algorithm(迪杰斯特拉)
 
-- Dijkstra’s algorithm is a Greedy algorithm and time complexity is O(V+E LogV), where V is number of vertices, and E is the number of edges
+- Dijkstra’s algorithm is a Greedy algorithm and time complexity is O( V logE) with Priority Queue Implementation, where V is number of vertices, and E is the number of edges. Because the push() and pop() operation take Log(E), and we need to explored V number of vertices, so the cost is V log(E)
+- 思路和bellman-ford是一摸一样的，唯一不同的是在遍历的方法上进行了优化(这也是为啥dijkstra会更快). So, instead of traversal all edge for V-1 times, we traverse all node 1 time. 每次遍历，我们在unexplored node里，找dist[x]最小的来进行下一次遍历。==> 有点像BFS traversal
 
-Property:
+**Property:**
 
 - Dijkstra doesn’t work for Graphs with negative weight edges (because it applys greedy algorithm)
-
-
-
-Idea:
-
-- use a dist[i] array to keep track the optimium distance from root to node i.
-- Initialize all node with value float(“inf”), except 0 for root node
+- 每个点只会被标记一次
+- 一旦被取出来了（或标记了），就不会再扩展
+- 所以，每次取得是没被标记的， dist[x]最小的节点。扫描他所有的出边，更新一遍dist[y] (where, x is visited node, y is unvisited node)
 - Traversal through each Eage[x, y], if dist[x] + weight[x, y] < dist[y], then update dist[y] = dist[x] + weight[x, y]  # Because we found a better approach/path ==> Some textbook call this **Relaxation Step**
 
 
 
+**Idea:**
+
+- 初始化dist[1] = 0, and 其余节点的dist[i] = float(‘inf’)
+- 找出一个没被标记的，dist[x]最小的节点，然后标记节点x
+- 扫描节点x的所有出边(x, y, w), 若dist[x] + w > dist[y], 则更新dist[y]
+- 重复上述2~3步骤，直到所有节点都被标记过了
+
+
+
+Code 模板：
+
+- [ Dijkstra 求最短路 II ](https://www.acwing.com/problem/content/852/)（Easy）（ACWing）
+
+```python
+from heapq import *
+
+if __name__ == "__main__":
+    n, m = map(int,input().split())
+    
+    ver = [[] for i in range(n + 1)] # 0~n
+    edge = [[] for i in range(n + 1)] # 0~n
+    dist = [1e9] * (n + 1)
+    v = [False] * (n + 1)
+    
+    # 出边数组建图
+    for i in range(m):
+        x, y, z = map(int,input().split())
+        ver[x].append(y)  # 另一端点
+        edge[x].append(z) # 边权
+
+    heap = []
+    heappush(heap, (0, 1)) # (距离, 点)
+    dist[1] = 0
+
+    # Dijkstra 算法
+    while heap:
+        distance, x = heappop(heap)
+        if v[x]:
+            continue
+        v[x] = True
+
+        for i in range(len(ver[x])):
+            y, z = ver[x][i], edge[x][i]
+            if dist[y] > dist[x] + z:
+                dist[y] = dist[x] + z
+                heappush(heap, (dist[y], y))
+
+    print(dist[n] if dist[n] != 1e9 else -1)
+
+```
 
 
 
 
 
+**实战例题：**
 
-**Algorithm** 
-Following are the detailed steps.
-***Input:*** Graph and a source vertex *src* 
-***Output:*** Shortest distance to all vertices from *src*. If there is a negative weight cycle, then shortest distances are not calculated, negative weight cycle is reported.
-**1)** This step initializes distances from the source to all vertices as infinite and distance to the source itself as 0; ==> Create an array dist[] of size |V| with all values as infinite except dist[src] where src is source vertex.
-**2)** This step calculates shortest distances. Do following |V|-1 times where |V| is the number of vertices in given graph. 
-…..**a)** Do following for each edge u-v 
-………………If dist[v] > dist[u] + weight of edge uv, then update dist[v] 
-………………….dist[v] = dist[u] + weight of edge uv
-**3)** This step reports if there is a negative weight cycle in graph. Do following for each edge u-v 
-……If dist[v] > dist[u] + weight of edge uv, then “Graph contains negative weight cycle” 
-The idea of step 3 is, step 2 guarantees the shortest distances if the graph doesn’t contain a negative weight cycle. If we iterate through all edges one more time and get a shorter path for any vertex, then there is a negative weight cycle
+- [网络延迟时间](https://leetcode-cn.com/problems/network-delay-time/)（Medium）半年内出题频次：
 
-***How does this work?*** Like other Dynamic Programming Problems, the algorithm calculates shortest paths in a bottom-up manner. It first calculates the shortest distances which have at-most one edge in the path. Then, it calculates the shortest paths with at-most 2 edges, and so on. After the i-th iteration of the outer loop, the shortest paths with at most i edges are calculated. There can be maximum |V| – 1 edges in any simple path, that is why the outer loop runs |v| – 1 times. The idea is, assuming that there is no negative weight cycle, if we have calculated shortest paths with at most i edges, then an iteration over all edges guarantees to give shortest path with at-most (i+1) edges (Proof is simple, you can refer [this](http://courses.csail.mit.edu/6.006/spring11/lectures/lec15.pdf) or [MIT Video Lecture](http://www.youtube.com/watch?v=Ttezuzs39nk))
+Question:
 
-Reference: 
+![image-20210818164044189](img/image-20210818164044189.png)
+
+Idea:
+
+
+
+Python Code:
+
+```python
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:  
+        """
+            方法二：Dijkstra’s (迪杰斯特拉)
+            其实就是bfs的实现方法
+        """
+        # 建图：
+        V =[[] for i in range(n+1)]  # Save 出边数组, each V[i] return a list of vertices that connect to it
+        E = [[] for i in range(n+1)]     # the len/cost/weight of edge, each E[i] return the length of a list of edges that connect to V[i]
+        for edge in times:
+            x, y, z = edge
+            V[x].append(y)
+            E[x].append(z)
+
+        print(f"V: {V}, E: {E}")
+        dist = [2**31 for i in range(n+1)]
+        dist[k] = 0
+        visited = [False for i in range(n+1)]
+
+        q = BinaryHeap()    # store a pair<length: int, id: int>
+        q.push((dist[k], k))
+        # Dijsktra algo
+        while q.size() != 0:
+            length, x = q.pop() # x is the idx
+            if visited[x]: # 每个点只需要扩展一次，如果explord过了，就跳过，没必要在扩展了
+                continue
+            visited[x] = True
+            # print(f"length: {length}, x: {x}")
+            # Explored V[x] -- 访问所有的出边，尝试更新（or relex)
+            for i in range(len(V[x])):    # x, y indicate idx, and z is the cost, or length of edge
+                y = V[x][i]   # V[x][i] ==> y, 可以看出V[x]存的是所有连接x的点，i是每个点遍历的idx
+                z = E[x][i]   # E[x][i] ==> z, 可以看出E[x]存的是所有连接x的边，i是edge[x, y]的长度/cost/weight
+                if dist[x] + z < dist[y]:
+                    dist[y] = dist[x] + z
+                    q.push((dist[y], y))
+            
+        # print(dist)
+        ans = 0
+        for i in range(1, n+1):
+            ans = max(ans, dist[i])
+        if ans == 2**31:
+            ans = -1
+        return ans
+
+        
+# Good Reference: 1) https://leetcode-cn.com/problems/design-twitter/solution/dui-you-xian-dui-lie-by-hw_wt-tb9g/
+class BinaryHeap():
+    def __init__(self):
+        self.minHeap = []   # start 
+    def __repr__(self):
+        return self.minHeap.__repr__()
+    def __str__(self):
+        return self.minHeap.__str__()
+    
+    def leftChild(self, i):
+        return 2*i+1
+
+    def rightChild(self, i):
+        return 2*i + 2
+    
+    def parent(self, i):
+        return (i-1)//2
+
+    def swap(self, id1, id2):
+        self.minHeap[id1], self.minHeap[id2] = self.minHeap[id2], self.minHeap[id1]
+
+    def size(self):
+        return len(self.minHeap)
+    
+    def peak_top(self):
+        return self.minHeap[0]
+
+    # Just append it to the end, and perform a heapifyUp
+    def push(self, node):
+        self.minHeap.append(node)
+        i = len(self.minHeap)-1
+        # Heapify Up: 把新来的放到最后，然后不停的向上调整
+        while i>0:
+            fa = self.parent(i)
+            if self.minHeap[i][0] < self.minHeap[fa][0]:    # 因为这heap里存的是一个pair, 这比较的是pair里的第一个元素
+                self.swap(i, fa)
+                i = fa
+            else:
+                break
+    
+    # Extract the first one and return as the answer, and replace the first spot with the last one, and perform heapify Down
+    def pop(self):
+        if len(self.minHeap)==0:
+            return 
+        ans = self.minHeap[0]
+        self.minHeap[0] = self.minHeap[-1]
+        self.minHeap.pop()
+        # Heapify Donw
+        j = 0
+        flagDone = False
+        while flagDone!= True:
+            smallest = j
+            L = self.leftChild(smallest)
+            R = self.rightChild(smallest)
+            if L < len(self.minHeap) and self.minHeap[L][0] < self.minHeap[smallest][0]:
+                smallest = L
+            if R < len(self.minHeap) and self.minHeap[R][0] < self.minHeap[smallest][0]:
+                smallest = R
+            if smallest != j:
+                self.swap(j, smallest)
+                j = smallest
+            else:
+                flagDone = True 
+        return ans
+```
+
+Question: Why is Bellman-ford running faster than Dijsktra?
+
+![image-20210820003048265](img/image-20210820003048265.png)
+
+==> 这和测试数据大小有关
+
+bellman-ford 的time complexity is something between V*E(Worse case，a chain linked list graph) and V+E（Best case, a two layer graph with one node at root), 如果数据小，那V \* E 也不大，而且还有可能在V+E的情况下通过
+
+but, the Dijsktras is always O(V logE), 所以如果给的数据规模小，且随机，那平均下来就会比bellman-ford 慢。只有在网络图非常大的情况下，才能体现出这个O(V logE)的价值。
+
+**Reference:** 
 
 - Dijkstra’s shortest path algorithm | Greedy Algo-7, https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+- 
 
 
 
-
+# 弗洛伊德
 
 
 
