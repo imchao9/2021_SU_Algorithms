@@ -15,7 +15,7 @@ class BinaryIndexedTree:
     def get(self, index):
         return self.a[index]
 
-    def set(self, index, value):
+    def set(self, index, value): 
         self.a[index] = value
 
     def sumPrefix(self, pos):
