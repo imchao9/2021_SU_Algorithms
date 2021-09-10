@@ -204,7 +204,7 @@ For me, I have this one, [Wireless-AC8265 Dual Mode Intel AC8265 Wireless NIC Mo
 ### **Reference:** 
 
 - Jetson Nano B01 vs A02: What’s New for the Compute on Module (CoM) and Carrier Board, https://www.arducam.com/nvidia-jetson-nano-b01-update-dual-camera/
-- Nvidia Jetson Nano Developer Kit A02 vs B01 vs 2GB, https://tutorial.cytron.io/2020/10/14/nvidia-jetson-nano-developer-kit-a02-vs-b01-vs-2gb/
+- Nvidia Jetson Nano Developer Kit A02 vs B01 vs 2GB, https://tutorial.cytron.io/2020/10/1/nvidia-jetson-nano-developer-kit-a02-vs-b01-vs-2gb/
 
 ## Setup
 

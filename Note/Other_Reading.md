@@ -16,6 +16,9 @@
     账号和密码均为极客时间报名手机号，考试截止时间为8月29日23:59分，请国外的同学也注意️
   - ️毕业要求请去我的教室查看，为了保证顺利毕业，需要提交毕业总结：https://jinshuju.net/f/iTkqLc
   - https://shimo.im/sheets/R6pvmmONnJ4A4A8g/MODOC/ 《代码模板目录》32个代码模板全部完成啦
+  - <算法竞赛进阶指南》作者亲授课「动态规划」总论，https://www.bilibili.com/video/BV1mK4y1j7kr?p=1&share_medium=android&share_plat=android&share_session_id=13066d30-4f8f-49f1-a126-7ef79de6e41d&share_source=WEIXIN&share_tag=s_i&timestamp=1630155412&unique_k=R1kyCQ
+- 找工作：
+  - 2022 New Grad Careers in Tech，https://github.com/TribbianniSun/NewGrad-2022
 - C++ API:
   - cppreference.com, https://zh.cppreference.com/w/cpp/string/basic_string/insert
 - Python API
@@ -54,5 +57,12 @@
   - 「代码随想录」刷题攻略,https://mp.weixin.qq.com/s/weyitJcVHBgFtSc19cbPdw
   - Tech Interview Handbook, https://techinterviewhandbook.org/algorithms/array
   - LEETCODE PATTERNS and Tips, https://seanprashad.com/leetcode-patterns/
+  - [如何刷算法题——跳槽前3个月必看](https://zhuanlan.zhihu.com/p/393018866)
+  2. [10W字的刷题笔记，多语言通吃](https://juejin.cn/post/6962491739500183588)
+  3. [如何在最短的时间内搞定数据结构和算法，应付面试? - 知乎](https://www.zhihu.com/question/28580777/answer/1864209518)
+  4. [Leetcode刷题顺序，看这一篇就够了 - 知乎](https://zhuanlan.zhihu.com/p/161036474)
+- LeetCode 题解仓库：
+  - https://github.com/soulmachine/leetcode
+  - https://github.com/halfrost/LeetCode-Go
 - 八股资料网站, https://github.com/search?q=%E5%85%AB%E8%82%A1%E6%96%87
 

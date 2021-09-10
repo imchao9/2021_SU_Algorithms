@@ -129,7 +129,9 @@ procedure PrimMST(G):
 
 ## Bellman–Ford Algorithm
 
-**Intro:** <u>Bellman-Ford is a type of DP algorithm, with O(VE) of time complexity</u> 
+**Intro:** <u>Bellman-Ford is a type of DP algorithm, with O(VE) of time complexity</u>  
+
+note: 因为每个点的都会有机会最为起始点来开始遍历, 所以running time 是 V * E
 
 **Goal:** <u>Given a graph and a source vertex *src* in graph, find shortest paths from *src* to all vertices in the given graph.</u>
 
@@ -466,6 +468,18 @@ but, the Dijsktras is always O(V logE), 所以如果给的数据规模小，且�
 
 
 # 弗洛伊德
+
+
+
+
+
+**Reference:** 
+
+
+
+
+
+
 
 
 
