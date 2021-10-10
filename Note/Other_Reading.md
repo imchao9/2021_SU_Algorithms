@@ -5,18 +5,25 @@
 - 李煜东的《算法竞赛进阶指南》资源社区， https://github.com/lydrainbowcat/tedukuri
   - AcWing在线竞赛, https://www.acwing.com/problem/content/description/138/
 - 课程事务
-  - 期中成绩：https://shimo.im/sheets/NJkbEv6MLMIKZVqR/uNPds/
-  - 期中重考链接，https://e.leetcode-cn.com/assessment/geekbang-0109
-  - **期中考试题及参考答案**：https://shimo.im/docs/fpggRcECyz4DnTUK/ 
+  - 期中考试
+    - 期中成绩：https://shimo.im/sheets/NJkbEv6MLMIKZVqR/uNPds/
+    - 期中重考链接，https://e.leetcode-cn.com/assessment/geekbang-0109
+    - **期中考试题及参考答案**：https://shimo.im/docs/fpggRcECyz4DnTUK/ 
+  - 期末考试
+    - 期末考试链接： https://e.leetcode-cn.com/assessment/geekbang-0110
+      - 账号和密码均为极客时间报名手机号，考试截止时间为8月29日23:59分，请国外的同学也注意️
+    - 算法训练营2021版-期末考试题及答案， https://shimo.im/docs/jcV5LxCZtR0YI2U8/ 
+    - 期末考试-测评结果，https://shimo.im/sheets/913JVb1xpBIBvl3E/GUemD/ 
+    - ️毕业要求请去我的教室查看，为了保证顺利毕业，需要提交毕业总结：https://jinshuju.net/f/iTkqLc
   - 算法作业收集表汇总， https://shimo.im/docs/5bqnr9KE7ghD7Wqy/read
   - 算法0期leetcode习题整理，https://shimo.im/docs/cP9RxQWRDGPpCcQR/read
   - **副本 算法训练营课程大纲**，https://shimo.im/docs/GlgvDP18j68rhFWk
   - 《算法作业批改表️》，https://shimo.im/sheets/8Nk6M2eYmxsYO2qL/Qw8gM/ 
-  - 期末考试链接： https://e.leetcode-cn.com/assessment/geekbang-0110
-    账号和密码均为极客时间报名手机号，考试截止时间为8月29日23:59分，请国外的同学也注意️
-  - ️毕业要求请去我的教室查看，为了保证顺利毕业，需要提交毕业总结：https://jinshuju.net/f/iTkqLc
-  - https://shimo.im/sheets/R6pvmmONnJ4A4A8g/MODOC/ 《代码模板目录》32个代码模板全部完成啦
-  - <算法竞赛进阶指南》作者亲授课「动态规划」总论，https://www.bilibili.com/video/BV1mK4y1j7kr?p=1&share_medium=android&share_plat=android&share_session_id=13066d30-4f8f-49f1-a126-7ef79de6e41d&share_source=WEIXIN&share_tag=s_i&timestamp=1630155412&unique_k=R1kyCQ
+  - 毕业找工作
+    - 另外，如果你想换工作，不知道怎么写简历，可以看下[这篇文章](https://time.geekbang.org/column/article/81990)。
+    - 毕业刷题路径， 
+  - 《代码模板目录》32个代码模板， https://shimo.im/sheets/R6pvmmONnJ4A4A8g/MODOC/ 
+  - 算法竞赛进阶指南》作者亲授课「动态规划」总论，https://www.bilibili.com/video/BV1mK4y1j7kr?p=1&share_medium=android&share_plat=android&share_session_id=13066d30-4f8f-49f1-a126-7ef79de6e41d&share_source=WEIXIN&share_tag=s_i&timestamp=1630155412&unique_k=R1kyCQ
 - 找工作：
   - 2022 New Grad Careers in Tech，https://github.com/TribbianniSun/NewGrad-2022
 - C++ API:

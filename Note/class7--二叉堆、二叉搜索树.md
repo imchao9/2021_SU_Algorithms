@@ -55,14 +55,38 @@ Some Heap Implementation trick in Python:
   - 
   ```
 
-  
 
-Reference: 
+
+
+
+
+Python Heapq 使用：
+
+- **heapq.heappush(*heap*, *item*)**： Push the value *item* onto the *heap*, maintaining the heap invariant.
+
+- **heapq.heappop(*heap*)**：  Pop and return the smallest item from the *heap*, maintaining the heap invariant. If the heap is empty, [`IndexError`](https://docs.python.org/3/library/exceptions.html#IndexError) is raised. To access the smallest item without popping it, use `heap[0]`.
+
+- **heapq.heappushpop(*heap*, *item*)**： Push *item* on the heap, then pop and return the smallest item from the *heap*. The combined action runs more efficiently than [`heappush()`](https://docs.python.org/3/library/heapq.html#heapq.heappush) followed by a separate call to [`heappop()`](https://docs.python.org/3/library/heapq.html#heapq.heappop).
+
+- **heapq.heapify(*x*)**：Transform list *x* into a heap, in-place, in linear time.
+
+
+
+
+
+**Reference:** 
 
 - OSU 2331 resource, [Heaps and Heapsort](http://web.cse.ohio-state.edu/software/2231/web-sw2/extras/slides/14.Heaps-Heapsort.pdf)
 - GeeksforGeek, Heapq with custom predicate in Python, https://www.geeksforgeeks.org/heapq-with-custom-predicate-in-python/
   - Min Heap in Python, https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/
 - Python heapq, https://docs.python.org/3/library/heapq.html
+- K个数、K个点、K个元素，3K堆排序，类比同类三解题！， https://mp.weixin.qq.com/s/pXCdAQ2aSTUrXPmx4pmhjA
+
+
+
+
+
+
 
 ## 实战例题
 

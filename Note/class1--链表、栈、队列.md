@@ -216,11 +216,6 @@ stack<int, vector<int> > mystack2;
 - (FIFO)First in, First out
 - ![image-20210621223411918](./img/image-20210621223411918.png)
 
-**双端队列**
-
-- 两边都可以进和出, e.g., Python list
-- ![image-20210621223605327](./img/image-20210621223605327.png)
-
 **优先队列（priority queue)**
 
 - 给一个优先级的定义(e.g., Time)， 用来判定进出的顺序
@@ -279,6 +274,11 @@ heapq.heappush(heap, item)
 
 ## 5. 双端队列deque
 
+**双端队列**
+
+- 两边都可以进和出, e.g., Python list
+- ![image-20210621223605327](./img/image-20210621223605327.png)
+
 ==时间复杂度==O(1)
 
 
@@ -293,7 +293,105 @@ heapq.heappush(heap, item)
 
 许多数据结构可以用来实现优先队列，例如二叉堆、二叉平衡树等
 
-==deque的API==
+
+
+### Python deque’s API
+
+- Intro: Deque (Doubly Ended Queue) in Python is implemented using the module “**collections**“. Deque is preferred over [list](https://www.geeksforgeeks.org/python-set-3-strings-lists-tuples-iterations/) in the cases where we need quicker append and pop operations from both the ends of container, as deque provides an **O(1)** time complexity for append and pop operations as compared to list which provides O(n) time complexity.
+
+- Common operations:
+
+  - deque creation:
+
+  - 增：
+    - **append(x)**: append *x* to the <u>right side of the deque</u>.
+    - **appendleft(x)** : append *x* to the <u>left side of the deque</u>.
+    - **insert(*i*, *x*):** Insert *x* into the deque at position *i*. If the insertion would cause a bounded deque to grow beyond *maxlen*, an [`IndexError`](https://docs.python.org/3/library/exceptions.html#IndexError) is raised.
+
+  - 删：
+
+    - **pop()** : Remove and return an element from the <u>right side of the deque</u>. If no elements are present, raises an [`IndexError`](https://docs.python.org/3/library/exceptions.html#IndexError).
+    - **popleft()** : Remove and return an element from <u>the left side of the deque.</u> If no elements are present, raises an [`IndexError`](https://docs.python.org/3/library/exceptions.html#IndexError).
+    - **clear():** Remove all elements from the deque leaving it with length 0.
+
+  - 查，改：
+
+    - normal indexing
+    - **rotate(*n=1*):** Rotate the deque *n* steps to the right. If *n* is negative, rotate to the left.
+    - **extend(iterable):** Extend the right side of the deque by appending elements from the iterable argument.
+    - **extendleft(iterable):** Extend the left side of the deque by appending elements from iterable. Note, the series of left appends results in reversing the order of elements in the iterable argument.
+
+```python
+# Deque Creation
+>>> from collections import deque
+>>> d = deque('ghi')                 # make a new deque with three items
+>>> for elem in d:                   # iterate over the deque's elements
+...     print(elem.upper())
+G
+H
+I
+
+# Append and appendleft()
+>>> d.append('j')                    # add a new entry to the right side
+>>> d.appendleft('f')                # add a new entry to the left side
+>>> d                                # show the representation of the deque
+deque(['f', 'g', 'h', 'i', 'j'])
+
+# Pop and popleft()
+>>> d.pop()                          # return and remove the rightmost item
+'j'
+>>> d.popleft()                      # return and remove the leftmost item
+'f'
+
+# Indexing
+>>> list(d)                          # list the contents of the deque
+['g', 'h', 'i']
+>>> d[0]                             # peek at leftmost item
+'g'
+>>> d[-1]                            # peek at rightmost item
+'i'
+>>> list(reversed(d))                # list the contents of a deque in reverse
+['i', 'h', 'g']
+>>> 'h' in d                         # search the deque
+True
+
+# Extend and extendleft
+>>> d.extend('jkl')                  # add multiple elements at once
+>>> d
+deque(['g', 'h', 'i', 'j', 'k', 'l'])
+
+>>> d.extendleft('abc')              # extendleft() reverses the input order
+>>> d
+deque(['c', 'b', 'a'])
+
+# Rotate
+>>> d.rotate(1)                      # right rotation
+>>> d
+deque(['l', 'g', 'h', 'i', 'j', 'k'])
+>>> d.rotate(-1)                     # left rotation
+>>> d
+deque(['g', 'h', 'i', 'j', 'k', 'l'])
+
+>>> deque(reversed(d))               # make a new deque in reverse order
+deque(['l', 'k', 'j', 'i', 'h', 'g'])
+>>> d.clear()                        # empty the deque
+>>> d.pop()                          # cannot pop from an empty deque
+Traceback (most recent call last):
+    File "<pyshell#6>", line 1, in -toplevel-
+        d.pop()
+IndexError: pop from an empty deque
+
+
+```
+
+- Reference:
+  - Python Deque Official doc, https://docs.python.org/3/library/collections.html#collections.deque
+  - GeeksforGeeks, https://www.geeksforgeeks.org/deque-in-python/
+
+
+
+### C++ deque的API
+
 - 1.1deque构造函数
   deque<T> deqT;//默认构造形式
 
@@ -333,37 +431,44 @@ void printDeque(const deque<int> &d)
 }
 ```
 
-==2.1 deque双端插入和删除操作==
-push_back(elem);//在容器尾部添加一个数据
+2.1 deque双端插入和删除操作
 
-push_front(elem);//在容器头部插入一个数据
+- push_back(elem);//在容器尾部添加一个数据
+- push_front(elem);//在容器头部插入一个数据
 
-pop_back();//删除容器最后一个数据
+- pop_back();//删除容器最后一个数据
 
-pop_front();//删除容器第一个数据
+- pop_front();//删除容器第一个数据
 
-==2.2 deque数据存取==
-at(idx);//返回索引idx所指的数据，如果idx越界，抛出out_of_range。
 
-operator[];//返回索引idx所指的数据，如果idx越界，不抛出异常，直接出错。
+2.2 deque数据存取
 
-front();//返回第一个数据。
+- at(idx);//返回索引idx所指的数据，如果idx越界，抛出out_of_range。
+- operator[];//返回索引idx所指的数据，如果idx越界，不抛出异常，直接出错。
 
-back();//返回最后一个数据
+- front();//返回第一个数据。
 
-==2.3 deque插入操作==
-insert(pos,elem);//在pos位置插入一个elem元素的拷贝，返回新数据的位置。
+- back();//返回最后一个数据
 
-insert(pos,n,elem);//在pos位置插入n个elem数据，无返回值。
 
-insert(pos,beg,end);//在pos位置插入[beg,end)区间的数据，无返回值。
+2.3 deque插入操作
 
-==2.4 deque删除操作==
-clear();//移除容器的所有数据
+- insert(pos,elem);//在pos位置插入一个elem元素的拷贝，返回新数据的位置。
+- insert(pos,n,elem);//在pos位置插入n个elem数据，无返回值。
 
-erase(beg,end);//删除[beg,end)区间的数据，返回下一个数据的位置。
+- insert(pos,beg,end);//在pos位置插入[beg,end)区间的数据，无返回值。
 
-erase(pos);//删除pos位置的数据，返回下一个数据的位置。
+
+2.4 deque删除操作
+
+- clear();//移除容器的所有数据
+- erase(beg,end);//删除[beg,end)区间的数据，返回下一个数据的位置。
+
+- erase(pos);//删除pos位置的数据，返回下一个数据的位置。
+
+
+
+
 
 ## 6. 优先队列priority queue
 
@@ -470,7 +575,7 @@ https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/
 
   * **Input**: nums = [0,0,1,1,1,2,2,3,3,4]
   * **Output**: 5, nums = [0,1,2,3,4,_,_,_,_,_]
-  * **Explanation**: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+  * **Explanation**: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively. 
     It does not matter what you leave beyond the returned k (hence they are underscores).
 
 * **思考**
@@ -506,7 +611,7 @@ https://leetcode-cn.com/problems/move-zeroes/
 ![image-20210809215705824](img/image-20210809215705824.png)
 
 * 主题思路：
-     
+  
      - 什么时候要呢？==》从前往后遍历，不是0就要，指针++
      - 是否可以覆盖呢？==》可以，因为array is sorted, and n is always >= i.
      - Edge case:  如果n小于nums.size()，后面补0；
@@ -529,7 +634,7 @@ https://leetcode-cn.com/problems/move-zeroes/
             """
             n = 0   # 跟踪最后一个valid的数。 
             for i in range(len(nums)):	
-                if nums[i] != 0: # 第一个肯定要。
+                if nums[i] != 0:
                     nums[n] = nums[i]
                     n += 1
             while n < len(nums):
@@ -545,8 +650,12 @@ https://www.acwing.com/problem/content/description/138/
 #### 141.环形链表 easy
 https://leetcode-cn.com/problems/linked-list-cycle/
 
+* Question:
+
+
+
 * Hashmap解法：
-  * 把链表过一遍，每个碰到的node，用一个hashmap来存，没次存的时候检测时候存过了，有相同，则说明有环；如果到最后都没有conflict，就说明无环。==》O(1) time, O(n) space, 
+  * 把链表过一遍，每个碰到的node，用一个hashmap来存，没次存的时候检测是否存过了，有相同，则说明有环；如果到最后都没有conflict，就说明无环。==》O(1) time, O(n) space, 
 * 快慢指针 ==》O(n) time, O（1）space,
   * ![image-20210621213403604](./img/image-20210621213403604.png)
   * 相遇了则返回有环，不相遇返回无环(无环的情况下，fast肯定会碰到nullptr，而停止下来)

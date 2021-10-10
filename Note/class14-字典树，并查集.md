@@ -48,10 +48,6 @@
 4. 迭代过程……
 5. 在某个结点处，关键词的所有字母已被取出，则读取附在该结点上的信息，即完成查找。
 
-
-
-
-
 **应用：**
 
 - 常用于统计和排序大量的字符串，经常被搜索引擎系统用于文本词频统计
@@ -99,6 +95,29 @@ class Trie:
 - 无论是保存树的结构，字符集数组，还是字符集映射，都需要额外的空间
 - 利用字符串的公共前缀来降低查询时间的开销已达到提高效率的目的。
 - 分组思想–前缀相同的字符串在同一子树中
+
+
+
+
+
+**Aho Corasic – Linear Search Algorithm**
+
+- Idea: find all strings from a given set in a text
+- Time Complexity: $\Omega (n+m+z)$
+  - n – length of text
+  - m – total number of characters in all words in set
+  - z – total occurences of words in text
+- We keep state within the trie, so that we don’t need to restart when a word doesn’t match
+  - Do this by building failure links and output links
+  - Failure links point to start of next potential keyword (longest proper prefix)
+  - Output link joins keywords reachable from each node via a suffix link
+  - ![image-20211008150701865](img/image-20211008150701865.png)
+
+- Problem Example 1: Obscene Word Filter
+
+![image-20211008150735401](img/image-20211008150735401.png)
+
+
 
 
 

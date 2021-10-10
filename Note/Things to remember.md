@@ -1,6 +1,9 @@
 # Thins to remember/review:
 
-- 写一个程序，不用管从那开始，想到啥先写啥，把所有relevant information先写上去，不会代码就写思路，思路清晰之后在考虑具体实现的代码。==》loop是要考虑每一步该如何走，往哪走，你的终止条件是什么？变化的信息/state有哪些？要收集的信息有哪些？最后在哪里返回？
+- 写一个程序，不用管从那开始，想到啥先写啥，把所有relevant information先写上去，不会代码就写思路，思路清晰之后在考虑具体实现的代码，比如
+
+  - 遍历array时，思考 when I need to take this element? what is the condition? or constraint?
+  - ==》loop是要考虑每一步该如何走，往哪走，你的终止条件是什么？变化的信息/state有哪些？要收集的信息有哪些？最后在哪里返回？
 
 - What make a good hashTable?
 
