@@ -289,10 +289,6 @@ class Solution:
 
 - [完成所有任务的最少初始能量](https://leetcode-cn.com/problems/minimum-initial-energy-to-finish-tasks/)（Hard）半年内出题频次：
 
-| eBay |
-| :--: |
-|  2   |
-
 Question:
 
 

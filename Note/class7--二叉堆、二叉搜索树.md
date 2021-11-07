@@ -8,7 +8,7 @@
 
 
 
-堆 Heap:
+### 堆 Heap:
 
 ![image-20210713121618244](img/image-20210713121618244.png)
 
@@ -59,8 +59,7 @@ Some Heap Implementation trick in Python:
 
 
 
-
-Python Heapq 使用：
+### Python Heapq 使用：
 
 - **heapq.heappush(*heap*, *item*)**： Push the value *item* onto the *heap*, maintaining the heap invariant.
 
@@ -88,11 +87,35 @@ Python Heapq 使用：
 
 
 
-## 实战例题
+# 实战例题
 
-#### 二叉堆
+## 二叉堆
 
-- [合并 K 个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)（Hard）
+### [合并 K 个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)（Hard）
+
+- [合并 K 个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)（Hard）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    22    |    26    |  16  |   44   |
+
+| Google | Apple | 百度 | 滴滴 |
+| :----: | :---: | :--: | :--: |
+|   5    |   8   |  2   |  3   |
+
+| Bloomberg | 快手 |
+| :-------: | :--: |
+|     4     |  3   |
+
+Question:
+
+
+
+Idea:
+
+
+
+Code:
 
 ```python
 class BinaryHeap:
@@ -174,12 +197,128 @@ class Solution:
 
 
 
-- [滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)（Hard）
 
-#### 二叉搜索树
 
-- [二叉搜索树中的插入操作](https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/)（Medium）
-- [后继者](https://leetcode-cn.com/problems/successor-lcci/)（Medium）
-- [删除二叉搜索树中的节点](https://leetcode-cn.com/problems/delete-node-in-a-bst/)（Medium）
-- [把二叉搜索树转换为累加树](https://leetcode-cn.com/problems/convert-bst-to-greater-tree/)（Medium）
+### [滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)（Hard）
+
+- [滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)（Hard）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    6     |    7     |  5   |   28   |
+
+| Google | Twitter | 高盛集团 | Bloomberg |
+| :----: | :-----: | :------: | :-------: |
+|   8    |    2    |    2     |     2     |
+
+| 阿里巴巴 |
+| :------: |
+|    2     |
+
+Question:
+
+![image-20211010164945764](img/image-20211010164945764.png)
+
+
+
+## 二叉搜索树
+
+
+
+### [二叉搜索树中的插入操作](https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/)（Medium）
+
+- [二叉搜索树中的插入操作](https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/)（Medium）半年内出题频次：
+
+| Amazon |
+| :----: |
+|   3    |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+```python
+
+```
+
+
+
+- [后继者](https://leetcode-cn.com/problems/successor-lcci/)（Medium）半年内出题频次：
+
+| 字节跳动 |
+| :------: |
+|    2     |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+```python
+
+```
+
+
+
+
+
+- [删除二叉搜索树中的节点](https://leetcode-cn.com/problems/delete-node-in-a-bst/)（Medium）半年内出题频次：
+
+| 字节跳动 | 微软 | Amazon | Bloomberg |
+| :------: | :--: | :----: | :-------: |
+|    3     |  4   |   2    |     3     |
+
+| eBay | LinkedIn |
+| :--: | :------: |
+|  2   |    2     |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+```python
+
+```
+
+
+
+
+
+- [把二叉搜索树转换为累加树](https://leetcode-cn.com/problems/convert-bst-to-greater-tree/)（Medium）半年内出题频次：
+
+| 字节跳动 | Facebook | 微软 |
+| :------: | :------: | :--: |
+|    2     |    2     |  2   |
+
+Question:
+
+
+
+Idea:
+
+
+
+Python Code:
+
+```python
+
+```
+
 

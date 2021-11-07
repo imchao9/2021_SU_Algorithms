@@ -143,15 +143,14 @@ sort(vec.begin(), vec.end(), Comp);
 
 ![image-20210622171340825](./img/image-20210622171340825-1624396423554.png)
 
-- 插入
-- ![image-20210621222742751](./img/image-20210621222742751.png)
-- 删除
-- ![image-20210621222802662](./img/image-20210621222802662.png)
+- 插入:  先2再1
+  - ![image-20210621222742751](./img/image-20210621222742751.png)
+- 删除:  只需一句话
+  - ![image-20210621222802662](./img/image-20210621222802662.png)
 - Note:
 
-知识点简单，主要是多联系熟悉一下。
-
-数组插入删除很贵O(n)，引入链表
+  - Motivation: 数组插入删除很贵O(n)，引入链表
+  - Dis-advantage: access in linked-list is expensive, O(n)
 
 首先加入保护节点，哨兵节点
 
@@ -647,12 +646,12 @@ https://leetcode-cn.com/problems/move-zeroes/
 #### 临值查找 hard
 https://www.acwing.com/problem/content/description/138/
 
-#### 141.环形链表 easy
+#### !!!141.环形链表 easy
 https://leetcode-cn.com/problems/linked-list-cycle/
 
 * Question:
 
-
+![image-20211010151259545](img/image-20211010151259545.png)
 
 * Hashmap解法：
   * 把链表过一遍，每个碰到的node，用一个hashmap来存，没次存的时候检测是否存过了，有相同，则说明有环；如果到最后都没有conflict，就说明无环。==》O(1) time, O(n) space, 
@@ -662,6 +661,30 @@ https://leetcode-cn.com/problems/linked-list-cycle/
   * 有环必定发生套圈（快慢指针相遇），无环不会发生套圈（快指针会先到达null，然后停下来)
   * 跟跑步套圈一样的。两个人跑步，跑得快的到终点了但没套圈，说明跑的时圆形的跑到；但如果套圈了，或再次碰上了，就说明跑的时圆形的跑道。
   * fastNode不一定非得只比head走得快一步，快3步，4步都行，只要成比例就行，但这样写简单些。==》是否有环总能检测出来，差距就是时间的问题。比如A 比 B快两倍，那A就跑到第二圈就会碰上B；但如果A只比B快1.5倍，那两者的最小公倍数是3，所以要经过3圈才能碰上；但如果A比B快3被，那经过1.5圈就能碰上了，但你能多加几个pointer，conditional statement就变长了，没必要自己给自己找麻烦。。。
+
+Python Code:
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        fast = head
+        while fast!=None and fast.next!=None:
+            fast = fast.next.next
+            head = head.next
+            if head == fast:
+                return True
+        return False
+```
+
+
+
+
 
 #### 142.环形链表II mid (不用掌握，就一数学题)
 https://leetcode-cn.com/problems/linked-list-cycle-ii/
@@ -685,19 +708,28 @@ https://leetcode-cn.com/problems/reverse-linked-list/
 
 * 思路一：迭代
 
-  1. 迭代需要三个指针，pre，cur，nxt，分别按顺序指向三个节点
-  2. 三个指针的初始化：pre指向空节点，cur指向头结点head，nxt指向head.next 因为head.next可能不存在，nxt在循环中定义，这样如果head为空就不会进入循环
-  3. 迭代过程
-     - nxt指向cur.next
-     - cur.next指向pre
-     - pre移动到cur位置
-     - cur移动到nxt位置
-  4. 当cur为空时，返回pre
+要改几条边？4 条嘛？==》 No, 5, remember Node(5) pointing to null,
+
+here is the whole picture:
+
+![image-20211010152754344](img/image-20211010152754344.png)
+
+==> 所以一共要改n条边！！
+
+步骤
+
+1. 迭代需要三个指针，pre，cur，nxt，分别按顺序指向三个节点
+2. 三个指针的初始化：pre指向空节点，cur指向头结点head，nxt指向head.next 因为head.next可能不存在，nxt在循环中定义，这样如果head为空就不会进入循环
+3. 迭代过程
+   - nxt指向cur.next
+   - cur.next指向pre
+   - pre移动到cur位置
+   - cur移动到nxt位置
+4. 当cur为空时，返回pre
 
 * Code:
 
   * ```python
-    
     class Solution:
         def reverseList(self, head: ListNode) -> ListNode:
             pre = None
@@ -712,14 +744,14 @@ https://leetcode-cn.com/problems/reverse-linked-list/
             return pre
     
     ```
-
     
-
+    
+    
   * **复杂度分析**
-
+  
     - 时间复杂度：O(n)*O*(*n*)
     - 空间复杂度：O(1)*O*(1)
-
+  
 * ==链表访问基本模板==：
 
   * ```c++
@@ -851,7 +883,7 @@ class Solution:
 
 ### 栈
 
-#### 20.有效的括号 easy
+#### !!!20.有效的括号 easy
 https://leetcode-cn.com/problems/valid-parentheses/
 
 Question:
@@ -869,29 +901,20 @@ Code:
 ```python
 class Solution:
     def isValid(self, s: str) -> bool:
-        """
-        "()[]{}"
-        ^
-        ( ] 
-            ^
-        ([)]
-        ^
-        stack = [(  ]
-        [ == ) ==>
-        """
         # This can save some computation cost
         if len(s) % 2 == 1:
             return False
         stack = []
+        # 每个字符都遍历一遍
         for ch in s:
+            # 如果是左括号，放到stack里
             if ch == "(" or ch == "{" or ch == "[":
                 stack.append(ch)
+            # 如果是右括号：判断是否有配对的，没有的话就是false; 有的话，还要确定是否match对应类型的括号
             else:
-                # Somehting is missing
                 if len(stack)==0:
                     return False
                 else:
-                    # 检查最后一个是否是匹配规定的类型
                     top = stack.pop()
                     if ch == ")" and top != "(":
                         return False
@@ -902,11 +925,55 @@ class Solution:
         return (len(stack) == 0)
 ```
 
-#### 155.最小栈 medium
-https://leetcode-cn.com/problems/min-stack/
+Note: 如果括号类型太多的话，可以用一个dictionary来储存
 
-* 新建两个栈，一个正常栈操作，一个使用前缀最小值
+
+
+#### 155.最小栈 medium
+
+Question: [155.最小栈 medium](https://leetcode-cn.com/problems/min-stack/)
+
+![image-20211010164607933](img/image-20211010164607933.png)
+
+
+
+* 新建两个栈，一个正常栈操作，另外一个用来储存前缀最小值（就是数组 arr[i] 之前里的最小值
+  * ![image-20211010163551316](img/image-20211010163551316.png)
 * 前缀最小值：新开栈，遍历数组和栈顶比，小于栈顶就进栈，大于就下一个
+
+Python Code
+
+```python
+class MinStack:
+    def __init__(self):
+        self.stack = []
+        self.pre_min = []
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        # For first element, or the new element is smaller
+        if len(self.pre_min)==0 or val < self.pre_min[-1]:
+            self.pre_min.append(val)
+        else:
+            self.pre_min.append(self.pre_min[-1])
+
+    def pop(self) -> None:
+        if self.stack:
+            self.stack.pop()
+            self.pre_min.pop()
+
+    def top(self) -> int:
+        if self.stack:
+            return self.stack[-1] 
+
+    def getMin(self) -> int:
+        if self.pre_min:
+            return self.pre_min[-1]
+```
+
+
+
+
 
 #### 150.逆波兰式 后缀表达式求值 medium
 https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/
@@ -914,7 +981,10 @@ https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/
 * 新建栈
 * 遍历数组，是数字进栈，是运算符连续pop两个数字进行运算
 
+
+
 #### 227 medium &224 hard 基本计算器 中缀表达式
+
 https://leetcode-cn.com/problems/basic-calculator-ii/
 https://leetcode-cn.com/problems/basic-calculator/
 
@@ -932,7 +1002,7 @@ https://leetcode-cn.com/problems/basic-calculator/
 
 * 转后缀，再求解
 
-<img src="https://tva1.sinaimg.cn/large/008i3skNly1grpa9lqmv9j30qa0b4adm.jpg" alt="截屏2021-06-21 上午2.15.50" style="zoom:50%;" />
+<img src="img/008i3skNly1grpa9lqmv9j30qa0b4adm.jpg" alt="截屏2021-06-21 上午2.15.50" style="zoom:50%;" />
 
 <img src="https://tva1.sinaimg.cn/large/008i3skNly1grpaa6w420j30pi0ysq9l.jpg" alt="截屏2021-06-21 上午2.16.27" style="zoom:50%;" />
 
@@ -966,24 +1036,151 @@ https://leetcode-cn.com/problems/basic-calculator/
   - https://leetcode-cn.com/problems/basic-calculator/
   - 
 
-## homework
-
-### 21.合并两个有序链表 easy
-https://leetcode-cn.com/problems/merge-two-sorted-lists/
-
-* 创建哨兵节点，和一个pre指针
-* 遍历l1和l2直到有一个为nullptr
-* l1和l2的头节点比较，pre->next指向较小的（假如为l1）
-* l1递归，l1 = l1->next
-* 将l1或者l2剩下的接到最后
+## Homework
 
 ### 66.加一 easy
-https://leetcode-cn.com/problems/plus-one/
+- [加一](https://leetcode-cn.com/problems/plus-one/)（Easy）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    0     |    0     |  3   |   3    |
+
+| 快手 | 美团 | Google | 腾讯 |
+| :--: | :--: | :----: | :--: |
+|  0   |  0   |   4    |  0   |
+
+| 华为 | 百度 |
+| :--: | :--: |
+|  0   |  0   |
+
+Question:
+
+
+
+Idea:
+
+
+
+Code:
+
+```python
+
+```
+
+
 
 * 从后往前遍历，分三种情况
 * 1. 最后一个不是9，直接最后一位+1，break返回
   2. 最后一个是9，变为0，继续往前扫描
   3. 直到第一个数，如果其为9，创建一个新vector长度+1，第一个数为1其余的都为0；不是9的话+1
 
+
+
+### 21.合并两个有序链表 easy
+
+- [合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)（Easy）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    7     |    23    |  9   |   36   |
+
+| 快手 | 美团 | Google | 腾讯 |
+| :--: | :--: | :----: | :--: |
+|  2   |  2   |   2    |  14  |
+
+| 华为 | 百度 |
+| :--: | :--: |
+|  0   |  3   |
+
+Question:
+
+
+
+Idea:
+
+- 创建哨兵节点，和一个pre指针
+
+* 遍历l1和l2直到有一个为nullptr
+* l1和l2的头节点比较，pre->next指向较小的（假如为l1）
+* l1递归，l1 = l1->next
+* 将l1或者l2剩下的接到最后
+
+
+
+Code:
+
+```python
+
+```
+
+
+
+
+
+
+
+
+
 ### 641.设置循环双端队列 medium
-https://leetcode-cn.com/problems/design-circular-deque/
+
+- [设计循环双端队列](https://leetcode-cn.com/problems/design-circular-deque/)（Medium）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    2     |    0     |  0   |   0    |
+
+| 快手 | 美团 | Google | 腾讯 |
+| :--: | :--: | :----: | :--: |
+|  0   |  0   |   0    |  0   |
+
+| 华为 | 百度 |
+| :--: | :--: |
+|  0   |  0   |
+
+Question:
+
+
+
+Idea:
+
+
+
+Code:
+
+```python
+
+```
+
+
+
+### [和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)（Medium）
+
+- [和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)（Medium）半年内出题频次：
+
+| Facebook | 字节跳动 | 微软 | Amazon |
+| :------: | :------: | :--: | :----: |
+|    76    |    10    |  15  |   11   |
+
+| Bloomberg | Google | Apple | Tesla |
+| :-------: | :----: | :---: | :---: |
+|     2     |   6    |   3   |   2   |
+
+| LinkedIn |
+| :------: |
+|    2     |
+
+
+
+Question:
+
+
+
+Idea:
+
+
+
+Code:
+
+```python
+```
+

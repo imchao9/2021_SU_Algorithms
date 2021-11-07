@@ -125,7 +125,7 @@ procedure PrimMST(G):
 
 
 
-# Shortest Paths
+# Single Source Shortest Paths(单源最短路径问题)
 
 ## Bellman–Ford Algorithm
 
@@ -141,7 +141,7 @@ note: 因为每个点的都会有机会最为起始点来开始遍历, 所以run
 
 - 什么是负环？ ==> The weight of a cycle is negative, e.g., 如下图，what is the shortest path for dist[A]? ==> 负无穷，why？因为最短的方式就是不停的绕圈，你没绕一次圈(A->B->C->D), dist[A] -= 1 ==》 这也是为什么Bellman-Ford可以用来检测负环的原因。当所有的edges, 都跑了V-1次，但最后再跑一次，你发现还有地方可以optimize，or relax, that means there is the negative cycle.
 
-![image-20210818002510739](../../../../Github_project(Drago1234)/My_Website/Drago1234.github.io/images/2021-08-16-pyhton-read-excel-content-and-send-automatic-email/image-20210818002510739.png)
+
 
 **Idea:**
 
@@ -166,7 +166,9 @@ The idea of step 3 is, step 2 guarantees the shortest distances if the graph doe
 
 
 
-- 什么时候只需要一轮？(Extreme case)
+- **什么时候只需要一轮？(Extreme case)**
+
+![image-20211017110952866](img/image-20211017110952866.png)
 
 When you have 4 vertice, and 3 vertice all connect to same one.
 
@@ -175,6 +177,8 @@ e..g, edges =[[1, 2], [1, 3], [1, 4] ], cost = [-2, -1, 3]
 ==> No matter the order, you always only need one iteration to get the result
 
 - When we need n-1 iteration? (Extreme case)
+
+![image-20211017111004410](img/image-20211017111004410.png)
 
 When all vertice are line up in a line, and the edge were given in reverse order. (Rare, and extreme case)
 
@@ -186,8 +190,10 @@ e.g., edges = [ ([3, 4], 3), ([1, 2], 2), ([2, 3], -1)] 	# 一般你不知道edg
 
 - use a dist[i] array to keep track the optimium distance from root to node i.
 - Initialize all node with value float(“inf”), except 0 for root node
-- Traversal all edges, for V-1 times. For each edge [x, y], if dist[x] + weight[x, y] < dist[y], then update dist[y] = dist[x] + weight[x, y]  # Because we found a better approach/path ==> Some textbook call this **Relaxation Step**
-  - That’s why the time complexity is O((V-1)*E)
+- <u>Traversal all edges, for V-1 times.</u> 
+  - For each edge [x, y], if dist[x] + weight[x, y] < dist[y], then update dist[y] = dist[x] + weight[x, y].   # Because we found a better/shorter approach/path ==> we need to update its shortest weight. Some textbook call this **Relaxation Step** ==> And, that’s why the time complexity is O((V-1)*E)
+  - 到最后结束的时候，我们要保证，没有边可以更新了。也就是说每一条边都要保证`dist[x] + z >= dist[y], where dist[x] is the cost from source to x, and dist[y] is the cost from source to y, and z is the cost from x to y   `
+- 
 
 **实战例题：**
 
@@ -467,7 +473,37 @@ but, the Dijsktras is always O(V logE), 所以如果给的数据规模小，且�
 
 
 
-# 弗洛伊德
+# All-pairs shortesting-path problem(全源最短路径问题): 
+
+## Floyd’s Algorithm(弗洛伊德)
+
+
+
+Introduction:
+
+Let the given graph be:
+
+![graph](img/fw-Graph.png)
+
+
+
+Initial graph
+
+
+
+
+
+Follow the steps below to find the shortest path between all the pairs of vertices.
+
+1. Create a matrix `A0` of dimension `n*n` where n is the number of vertices. The row and the column are indexed as i and j respectively. i and j are the vertices of the graph.
+
+   Each cell A[i][j] is filled with the distance from the `ith` vertex to the `jth` vertex. If there is no path from `ith` vertex to `jth` vertex, the cell is left as infinity.
+
+Algorithm: 
+
+
+
+Complexity analysis:
 
 
 
@@ -475,9 +511,11 @@ but, the Dijsktras is always O(V logE), 所以如果给的数据规模小，且�
 
 **Reference:** 
 
-
-
-
+- Brilliant, Floyd-Warshall Algorithm, https://brilliant.org/wiki/floyd-warshall-algorithm/
+- GeeksforGeeks, Floyd Warshall Algorithm | DP-16, https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
+- [Video], 4.2 All Pairs Shortest Path (Floyd-Warshall) - Dynamic Programming, https://www.youtube.com/watch?v=oNI0rf2P9gE
+- Programiz, Floyd-Warshall Algorithm, https://www.programiz.com/dsa/floyd-warshall-algorithm
+- 
 
 
 
