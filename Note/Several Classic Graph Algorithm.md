@@ -515,7 +515,7 @@ Complexity analysis:
 - GeeksforGeeks, Floyd Warshall Algorithm | DP-16, https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
 - [Video], 4.2 All Pairs Shortest Path (Floyd-Warshall) - Dynamic Programming, https://www.youtube.com/watch?v=oNI0rf2P9gE
 - Programiz, Floyd-Warshall Algorithm, https://www.programiz.com/dsa/floyd-warshall-algorithm
-- 
+- Lecture Note, Floyd’s Algorithm， http://www.cs.umsl.edu/~sanjiv/classes/cs5740/lectures/floyd.pdf
 
 
 
